@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<!--
+  项目：iconfont 图标演示（一）Font Awesome 字体图标方式 · 活字版式
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  命名说明：CSS 类名 / id / JS 变量统一使用 jx530_ 前缀
+  设计说明：字体图标的本质是"把图标做成字体字形"，因此整页借用
+  活字印刷的语言——冷灰纸面、墨色文字、校对朱红、字符映射字盘；
+  悬停任一字模格，可见该图标的 Unicode 码点，直观呈现"图标即字符"
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>字形即图标 — Font Awesome 字体图标</title>
+  <!-- 本地化的 Font Awesome 6.5.2 样式（含字体文件，无需外网） -->
+  <link rel="stylesheet" href="cdn/fontawesome/6.5.2/css/all.min.css">
+  <style>
+    /* ===== 设计基调：冷灰纸面 + 墨色 + 校对朱红 ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #e9e9e1;                       /* 冷灰纸面 */
+      color: #191913;                                  /* 墨色 */
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.75;
+      padding: 0 20px 56px;
+    }
+
+    ::selection {
+      background: #c3272b;                             /* 选中文字如校对笔划过 */
+      color: #f4f4ee;
+    }
+
+    /* ===== 页眉：墨线之下，报头式排版 ===== */
+    .jx530_masthead {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 34px 0 22px;
+      border-bottom: 3px solid #191913;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      animation: jx530_fadein 0.7s ease both;
+    }
+
+    .jx530_masthead-title {
+      font-family: Georgia, "STZhongsong", "SimSun", serif;
+      font-size: 46px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.15;
+    }
+
+    .jx530_masthead-sub {
+      max-width: 46em;
+      font-size: 13px;
+      color: #55554a;
+      margin-top: 10px;
+    }
+
+    .jx530_masthead-sub code {
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      background: #f4f4ee;
+      border: 1px solid #d8d8cc;
+      padding: 0 5px;
+      border-radius: 3px;
+    }
+
+    /* 版本牌：一枚铅制字模的样子 */
+    .jx530_typebadge {
+      flex-shrink: 0;
+      border: 1px solid #191913;
+      padding: 9px 14px;
+      text-align: center;
+      background: #f4f4ee;
+      box-shadow: 3px 3px 0 #191913;
+    }
+
+    .jx530_typebadge b {
+      display: block;
+      font-family: Georgia, serif;
+      font-size: 17px;
+      letter-spacing: 0.04em;
+    }
+
+    .jx530_typebadge span {
+      display: block;
+      font-size: 11px;
+      color: #8b8b7d;
+      letter-spacing: 0.12em;
+    }
+
+    /* ===== 字盘：字符映射表，本页的记忆点 ===== */
+    .jx530_charmap {
+      max-width: 980px;
+      margin: 26px auto 0;
+      animation: jx530_fadein 0.7s ease 0.15s both;
+    }
+
+    .jx530_charmap-caption {
+      font-size: 12px;
+      color: #8b8b7d;
+      margin-bottom: 8px;
+    }
+
+    .jx530_charmap-caption i {
+      color: #c3272b;
+      margin-right: 4px;
+    }
+
+    .jx530_charmap-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 1px;                                        /* 背景色从缝隙透出，成为字盘分隔线 */
+      background: #191913;
+      border: 1px solid #191913;
+    }
+
+    .jx530_charmap-cell {
+      background: #f4f4ee;
+      padding: 16px 4px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.18s;
+    }
+
+    .jx530_charmap-cell i {
+      font-size: 24px;
+      color: #191913;
+      transition: color 0.18s;
+    }
+
+    .jx530_charmap-cell code {
+      font-family: Consolas, monospace;
+      font-size: 11px;
+      color: #8b8b7d;
+      letter-spacing: 0.06em;
+    }
+
+    /* 悬停：字模被"检字"拾起——图标翻红，露出码点 */
+    .jx530_charmap-cell:hover {
+      background: #fff;
+    }
+
+    .jx530_charmap-cell:hover i {
+      color: #c3272b;
+      transform: scale(1.12);
+    }
+
+    /* ===== 分组：组名即技术前缀，不另设装饰编号 ===== */
+    .jx530_case {
+      max-width: 980px;
+      margin: 40px auto 0;
+      animation: jx530_fadein 0.7s ease both;
+    }
+
+    .jx530_case-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #c9c9bc;
+      padding-bottom: 10px;
+      margin-bottom: 1px;
+    }
+
+    .jx530_case-name {
+      font-family: Georgia, "STZhongsong", "SimSun", serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .jx530_case-name code {
+      font-family: Consolas, monospace;
+      font-size: 16px;
+      color: #c3272b;
+      margin-right: 10px;
+    }
+
+    .jx530_case-note {
+      font-size: 12px;
+      color: #8b8b7d;
+    }
+
+    .jx530_case-note code {
+      font-family: Consolas, monospace;
+      font-size: 11px;
+      color: #191913;
+      background: #f4f4ee;
+      border: 1px solid #d8d8cc;
+      padding: 0 5px;
+      border-radius: 3px;
+    }
+
+    /* 图标陈列：沿用字盘分格语言，与字盘呼应（空位是未上墨的空模） */
+    .jx530_tray {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 1px;
+      background: #dfded2;
+      border: 1px solid #dfded2;
+      border-top: none;
+    }
+
+    .jx530_tray-cell {
+      background: #f4f4ee;
+      padding: 20px 6px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.18s;
+    }
+
+    .jx530_tray-cell i {
+      font-size: 26px;
+      color: #191913;
+      transition: color 0.18s, transform 0.18s;
+    }
+
+    .jx530_tray-cell:hover {
+      background: #fff;
+    }
+
+    .jx530_tray-cell:hover i {
+      color: #c3272b;
+      transform: scale(1.14);
+    }
+
+    .jx530_tray-name {
+      font-size: 11px;
+      color: #55554a;
+      font-family: Consolas, "PingFang SC", monospace;
+    }
+
+    /* ===== 排印说明：一块反白的"墨版" ===== */
+    .jx530_colophon {
+      max-width: 980px;
+      margin: 44px auto 0;
+      background: #191913;
+      color: #d9d9cd;
+      padding: 26px 28px 24px;
+      animation: jx530_fadein 0.7s ease both;
+    }
+
+    .jx530_colophon h2 {
+      font-family: Georgia, "STZhongsong", "SimSun", serif;
+      font-size: 17px;
+      color: #e9e9e1;
+      margin-bottom: 10px;
+    }
+
+    .jx530_colophon h2 i {
+      color: #c3272b;
+      margin-right: 8px;
+    }
+
+    .jx530_colophon p {
+      font-size: 13px;
+      margin: 6px 0;
+    }
+
+    .jx530_colophon pre {
+      background: #24241c;
+      border-left: 2px solid #c3272b;
+      color: #e9e9e1;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.9;
+      padding: 10px 16px;
+      margin: 10px 0;
+      overflow-x: auto;
+    }
+
+    /* ===== 页脚：返回首页 + 两种实现的对照 ===== */
+    .jx530_footlinks {
+      max-width: 980px;
+      margin: 30px auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .jx530_back-home,
+    .jx530_crosslink {
+      font-size: 13px;
+      text-decoration: none;
+      color: #191913;
+      border: 1px solid #191913;
+      background: #f4f4ee;
+      padding: 9px 20px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .jx530_back-home:hover,
+    .jx530_crosslink:hover {
+      background: #c3272b;
+      border-color: #c3272b;
+      color: #f4f4ee;
+    }
+
+    .jx530_crosslink {
+      border-style: dashed;                            /* 虚线：通往另一张对照页 */
+    }
+
+    /* 入场：全页仅此一次的编排 */
+    @keyframes jx530_fadein {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .jx530_masthead, .jx530_charmap, .jx530_case, .jx530_colophon {
+        animation: none;
+      }
+      .jx530_tray-cell i, .jx530_charmap-cell i {
+        transition: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .jx530_charmap-grid { grid-template-columns: repeat(4, 1fr); }
+      .jx530_masthead-title { font-size: 34px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 页眉 ===== -->
+  <header class="jx530_masthead">
+    <div>
+      <h1 class="jx530_masthead-title">字形即图标</h1>
+      <p class="jx530_masthead-sub">
+        Font Awesome 把几千个图标铸成一款字体：每个图标是字体里的一个字形，占据一个 Unicode 码位。
+        写下一个类名，就像拣出一个铅字——<code>&lt;i class="fa-solid fa-house"&gt;</code>，
+        由 CSS 的 <code>content: "\f015"</code> 与 @font-face 加载的字体文件共同把它印到页面上。
+      </p>
+    </div>
+    <div class="jx530_typebadge">
+      <b>Font Awesome</b>
+      <span>6.5.2 · 本地化</span>
+    </div>
+  </header>
+
+  <!-- ===== 字盘：图标与码点一一对应 ===== -->
+  <section class="jx530_charmap">
+    <p class="jx530_charmap-caption"><i class="fa-solid fa-keyboard"></i>字盘 · 悬停任意字模，可见它占用的码点</p>
+    <div class="jx530_charmap-grid">
+      <div class="jx530_charmap-cell"><i class="fa-solid fa-house"></i><code>\f015</code></div>
+      <div class="jx530_charmap-cell"><i class="fa-solid fa-magnifying-glass"></i><code>\f002</code></div>
+      <div class="jx530_charmap-cell"><i class="fa-solid fa-camera"></i><code>\f030</code></div>
+      <div class="jx530_charmap-cell"><i class="fa-solid fa-heart"></i><code>\f004</code></div>
+      <div class="jx530_charmap-cell"><i class="fa-solid fa-star"></i><code>\f005</code></div>
+      <div class="jx530_charmap-cell"><i class="fa-solid fa-gear"></i><code>\f013</code></div>
+      <div class="jx530_charmap-cell"><i class="fa-solid fa-user"></i><code>\f007</code></div>
+      <div class="jx530_charmap-cell"><i class="fa-solid fa-bell"></i><code>\f0f3</code></div>
+    </div>
+  </section>
+
+  <!-- ===== 第一盒字模：fa-solid ===== -->
+  <section class="jx530_case">
+    <div class="jx530_case-head">
+      <h2 class="jx530_case-name"><code>fa-solid</code>实心字形</h2>
+      <p class="jx530_case-note">引用：<code>&lt;i class="fa-solid fa-图标名"&gt;</code></p>
+    </div>
+    <div class="jx530_tray">
+      <div class="jx530_tray-cell"><i class="fa-solid fa-house"></i><span class="jx530_tray-name">house</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-magnifying-glass"></i><span class="jx530_tray-name">magnifying-glass</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-camera"></i><span class="jx530_tray-name">camera</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-heart"></i><span class="jx530_tray-name">heart</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-star"></i><span class="jx530_tray-name">star</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-gear"></i><span class="jx530_tray-name">gear</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-user"></i><span class="jx530_tray-name">user</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-bell"></i><span class="jx530_tray-name">bell</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-cart-shopping"></i><span class="jx530_tray-name">cart-shopping</span></div>
+      <div class="jx530_tray-cell"><i class="fa-solid fa-trash-can"></i><span class="jx530_tray-name">trash-can</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 第二盒字模：fa-regular ===== -->
+  <section class="jx530_case">
+    <div class="jx530_case-head">
+      <h2 class="jx530_case-name"><code>fa-regular</code>线性字形</h2>
+      <p class="jx530_case-note">同一款字体家族的另一个字重，轮廓与实心一一对应</p>
+    </div>
+    <div class="jx530_tray">
+      <div class="jx530_tray-cell"><i class="fa-regular fa-heart"></i><span class="jx530_tray-name">heart</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-star"></i><span class="jx530_tray-name">star</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-bell"></i><span class="jx530_tray-name">bell</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-user"></i><span class="jx530_tray-name">user</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-envelope"></i><span class="jx530_tray-name">envelope</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-comment"></i><span class="jx530_tray-name">comment</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-clock"></i><span class="jx530_tray-name">clock</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-image"></i><span class="jx530_tray-name">image</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-folder"></i><span class="jx530_tray-name">folder</span></div>
+      <div class="jx530_tray-cell"><i class="fa-regular fa-thumbs-up"></i><span class="jx530_tray-name">thumbs-up</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 第三盒字模：fa-brands ===== -->
+  <section class="jx530_case">
+    <div class="jx530_case-head">
+      <h2 class="jx530_case-name"><code>fa-brands</code>品牌字形</h2>
+      <p class="jx530_case-note">各公司标志单独成款字体，码位彼此独立</p>
+    </div>
+    <div class="jx530_tray">
+      <div class="jx530_tray-cell"><i class="fa-brands fa-weixin"></i><span class="jx530_tray-name">weixin</span></div>
+      <div class="jx530_tray-cell"><i class="fa-brands fa-qq"></i><span class="jx530_tray-name">qq</span></div>
+      <div class="jx530_tray-cell"><i class="fa-brands fa-github"></i><span class="jx530_tray-name">github</span></div>
+      <div class="jx530_tray-cell"><i class="fa-brands fa-html5"></i><span class="jx530_tray-name">html5</span></div>
+      <div class="jx530_tray-cell"><i class="fa-brands fa-chrome"></i><span class="jx530_tray-name">chrome</span></div>
+      <div class="jx530_tray-cell"><i class="fa-brands fa-android"></i><span class="jx530_tray-name">android</span></div>
+      <div class="jx530_tray-cell"><i class="fa-brands fa-apple"></i><span class="jx530_tray-name">apple</span></div>
+      <div class="jx530_tray-cell"><i class="fa-brands fa-telegram"></i><span class="jx530_tray-name">telegram</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 排印说明 ===== -->
+  <section class="jx530_colophon">
+    <h2><i class="fa-solid fa-book-open"></i>字体图标是怎样印出来的</h2>
+    <p>一、引入本地化样式文件（已随页面下载到 cdn 目录，无需外网）：</p>
+    <pre>&lt;link rel="stylesheet" href="cdn/fontawesome/6.5.2/css/all.min.css"&gt;</pre>
+    <p>二、用类名拣字，fa-solid / fa-regular / fa-brands 分别对应三款字体：</p>
+    <pre>&lt;i class="fa-solid fa-house"&gt;&lt;/i&gt;</pre>
+    <p>三、字体文件由 all.min.css 里的 @font-face 自动加载（webfonts 目录下的 .woff2 / .ttf），
+      图标既然是文字，颜色字号自然也交给 color 与 font-size。</p>
+  </section>
+
+  <!-- ===== 页脚链接 ===== -->
+  <nav class="jx530_footlinks">
+    <a class="jx530_back-home" href="index.html">← 返回首页 index.html</a>
+    <a class="jx530_crosslink" href="iconfont-2.html">对照另一种实现：线条即图标（SVG） →</a>
+  </nav>
+
+</body>
+</html>

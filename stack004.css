@@ -1,0 +1,34 @@
+*{
+    padding: 0;
+    margin: 0;
+    /* width和height是包含border和padding*/
+    box-sizing: border-box;
+}
+body{
+    background-color: yellow;
+    font-family: "微软雅黑";
+    color: blue;
+}
+/*子元素继承父元素的一些属性，比如font color*/
+
+.container{
+    color: red;
+    width: 1200px;
+    margin: 40px auto;
+}
+h2{
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border: 2px dotted white;
+}
+.card-wrap{
+    background-color: pink;
+    padding: 20px;
+}
+#card-wrap{
+    background-color: orange;
+
+}

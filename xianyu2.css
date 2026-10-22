@@ -1,0 +1,532 @@
+/* ============ 闲鱼「我的」页面样式 ============ */
+/*
+  项目：闲鱼APP 网页元素设计 - 我的（个人中心）页
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  命名说明：类名前缀 jx 为姓名"金鑫"拼音缩写
+*/
+
+/* 全局重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e8e8e8;          /* 页面外的背景色 */
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 手机页面容器：限制最大宽度，居中显示 */
+.jx-page {
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: #f4f4f4;
+  padding: 16px 16px 90px;            /* 底部留白，避免内容被导航栏挡住 */
+  position: relative;
+}
+
+/* 通用小箭头 */
+.arrow {
+  color: #999999;
+  font-weight: normal;
+}
+
+/* ============ 顶部个人信息区 ============ */
+.profile {
+  display: flex;
+  align-items: center;
+  padding: 8px 0 16px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;                /* 圆角方形头像 */
+  margin-right: 12px;
+  /* 白底素材图融入页面背景 */
+  mix-blend-mode: multiply;
+}
+
+.profile-info {
+  flex: 1;                            /* 占满中间，把右侧图标挤到最右 */
+}
+
+.nickname {
+  font-size: 19px;
+  font-weight: bold;
+  color: #111111;
+  margin-bottom: 6px;
+}
+
+.yulizhi {
+  font-size: 12px;
+  color: #666666;
+}
+
+/* 右上角 帮助与客服 / 设置 */
+.profile-links {
+  display: flex;
+  gap: 18px;
+}
+
+.link-item {
+  text-align: center;
+}
+
+/* 帮助与客服图标：和「设置」齿轮统一大小与色调 */
+.link-item img {
+  width: 26px;
+  height: 26px;
+  display: block;
+  margin: 0 auto;
+  filter: grayscale(100%);            /* 去色，和齿轮颜色一致 */
+}
+
+/* 设置齿轮：用字符绘制，统一和帮助图标一样大 */
+.gear-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-size: 26px;
+  line-height: 1;
+  color: #222222;
+}
+
+.link-item p {
+  font-size: 10px;
+  color: #333333;
+  margin-top: 2px;
+}
+
+/* ============ 开通专属等级横幅 ============ */
+.vip-banner {
+  position: relative;
+  background: linear-gradient(90deg, #ffd21e, #ffe45c);
+  border-radius: 12px;
+  padding: 18px 16px;
+  overflow: hidden;                   /* 让小鱼图案被圆角裁切 */
+}
+
+.banner-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.banner-desc {
+  font-size: 13px;
+  font-weight: bold;
+  color: #5a4a00;
+}
+
+/* 右侧小黄鱼图案 */
+.banner-fish {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);        /* 垂直居中 */
+  height: 85px;
+  width: 130px;
+  object-fit: cover;                  /* 裁掉图片右边多余部分 */
+  object-position: left center;
+}
+
+/* ============ 白色通用卡片 ============ */
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.card-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: #111111;
+}
+
+/* ============ 数据统计卡片 ============ */
+.stats-card {
+  display: flex;
+}
+
+.stat-item {
+  flex: 1;                            /* 四项平分一行 */
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 24px;
+  font-weight: 900;
+  color: #111111;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #333333;
+  margin-top: 4px;
+}
+
+/* ============ 我的交易 ============ */
+.trade-row {
+  display: flex;
+  margin-top: 14px;
+}
+
+.trade-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;         /* 图标在上、文字在下 */
+  align-items: center;
+}
+
+/* 图标裁切框：只显示素材图中间的图标部分 */
+.jx-trade-icon {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.jx-trade-icon img {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);   /* 水平居中 */
+  width: 176px;
+  top: -137px;
+}
+
+/* 「我可卖的」¥ 图标位置和大小略有不同，单独微调并去色统一色调 */
+.jx-trade-icon-ke img {
+  width: 205px;
+  top: -175px;
+  filter: grayscale(100%);
+}
+
+/* 文字标签：用 HTML 写，保证四个标签基线完全对齐 */
+.trade-label {
+  font-size: 12px;
+  color: #111111;
+  margin-top: 8px;
+}
+
+/* ============ 闲鱼回收卡片 ============ */
+.recycle-head {
+  display: flex;
+  align-items: baseline;              /* 标题和小字底部对齐 */
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.recycle-sub {
+  font-size: 12px;
+  color: #999999;
+}
+
+.recycle-body {
+  display: flex;
+}
+
+.recycle-left,
+.recycle-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 中间的分隔线 */
+.recycle-right {
+  border-left: 1px solid #f0f0f0;
+  padding-left: 14px;
+}
+
+.phone-thumb {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.phone-thumb img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  mix-blend-mode: multiply;
+}
+
+/* 「热门」小角标 */
+.hot-badge {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #333333;
+  color: #ffffff;
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.phone-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111111;
+  margin-bottom: 6px;
+  white-space: nowrap;                /* 不换行，避免箭头掉到第二行 */
+}
+
+.phone-price {
+  font-size: 12px;
+  color: #999999;
+}
+
+/* 橙色价格 */
+.price {
+  font-size: 19px;
+  font-weight: 900;
+  color: #ff4400;
+}
+
+.pinlei-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  mix-blend-mode: multiply;
+}
+
+.pinlei-num {
+  font-size: 19px;
+  font-weight: 900;
+  color: #111111;
+  margin-bottom: 4px;
+}
+
+.pinlei-label {
+  font-size: 12px;
+  color: #999999;
+}
+
+/* ============ 五个圆形功能入口 ============ */
+.entry-row {
+  display: flex;
+  padding: 18px 4px 4px;
+}
+
+.entry-item {
+  flex: 1;
+  text-align: center;
+}
+
+.entry-item p {
+  font-size: 12px;
+  color: #111111;
+  margin-top: 6px;
+}
+
+/* 圆形图标容器：裁切素材图中间的圆形图案 */
+.entry-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;                     /* 水平居中 */
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+
+.entry-icon img {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);        /* 水平居中 */
+}
+
+/* 每张素材图圆形图案的位置和大小不同，分别微调 */
+.icon-1 img { width: 110px; top: -63px; }
+.icon-2 img { width: 119px; top: -78px; }
+.icon-3 img { width: 215px; top: -185px; }
+.icon-4 img { width: 180px; top: -161px; }
+.icon-5 img { width: 196px; top: -176px; }
+
+/* 小法庭是方形线条图标，不要圆形裁切 */
+.icon-3 {
+  border-radius: 10px;
+}
+
+/* ============ 活动卡片区（网格布局） ============ */
+.promo-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;  /* 左列稍宽 */
+  grid-template-rows: 120px 120px;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.promo-card {
+  position: relative;
+  border-radius: 12px;
+  padding: 12px;
+  overflow: hidden;                   /* 裁切铺满卡片的素材图 */
+}
+
+/* 闲鱼币大卡片占两行 */
+.jx-promo-yellow {
+  grid-row: 1 / 3;
+  background-color: #ffe9a8;
+}
+
+.promo-green  { background-color: #d3f3cd; }
+.promo-purple { background-color: #f3e3ff; padding: 0; }  /* 素材图已含标题，铺满即可 */
+.promo-cream  { background-color: #fdf0d9; }
+.promo-pink   { background-color: #ffe0ec; }
+
+.promo-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: #111111;
+  position: relative;
+  z-index: 1;                         /* 文字显示在素材图上面 */
+}
+
+.promo-desc {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 「点击领币」橙色小按钮 */
+.promo-tag {
+  display: inline-block;
+  font-size: 10px;
+  color: #ffffff;
+  background: linear-gradient(90deg, #ff7a18, #ff4400);
+  border-radius: 20px;
+  padding: 2px 8px;
+  vertical-align: middle;
+}
+
+/* 「GO」小按钮 */
+.go-btn {
+  display: inline-block;
+  font-size: 10px;
+  color: #333333;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  padding: 1px 7px;
+  margin-top: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 卡片内的素材图：绝对定位 + 裁切，只显示图案部分 */
+.promo-art {
+  position: absolute;
+  overflow: hidden;
+}
+
+.promo-art img {
+  position: absolute;
+}
+
+/* 闲鱼币：金币图案铺满整卡 */
+.art-xianyubi {
+  inset: 0;                           /* 铺满整个卡片 */
+}
+
+.art-xianyubi img {
+  width: 294px;
+  left: -70px;
+  top: -170px;
+}
+
+/* 神奇鱼塘：礼物图案放在卡片底部 */
+.art-duihuan {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 78px;
+}
+
+.art-duihuan img {
+  width: 100%;
+  top: -185px;
+}
+
+/* 闲鱼游戏：素材图本身带标题按钮，铺满整卡 */
+.art-youxi {
+  inset: 0;
+}
+
+.art-youxi img {
+  width: 183px;
+  left: -24px;
+  top: -118px;
+}
+
+/* 现金签到：小红包放在右下角 */
+.art-hongbao {
+  right: 6px;
+  bottom: 6px;
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+}
+
+.art-hongbao img {
+  width: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -118px;
+}
+
+/* ============ 底部导航栏 ============ */
+.tabbar {
+  position: fixed;                    /* 固定在屏幕底部 */
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;                   /* 和页面同宽 */
+  height: 60px;
+  background-color: #ffffff;
+  border-top: 1px solid #eeeeee;
+  display: flex;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 底部导航栏所有图标统一大小 */
+.tab-item img {
+  width: 26px;
+  height: 26px;
+  mix-blend-mode: multiply;           /* 白底图标融入导航栏 */
+}
+
+.tab-item p {
+  font-size: 11px;
+  color: #333333;
+  margin-top: 3px;
+}
+
+/* 中间凸起的卖闲置按钮 */
+.tab-center img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;                 /* 裁成圆形，去掉白底 */
+  margin-top: -22px;                  /* 向上凸起 */
+  mix-blend-mode: normal;             /* 黄色按钮不需要融入背景 */
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+}

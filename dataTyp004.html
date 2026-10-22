@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据类型与运算符</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+        }
+        .num {
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eaf2ff;
+            border: 1px solid #cfe0ff;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #234;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!--  -->
+    </div>
+    <script>
+        var a = 10,b = 4;
+        // 控制台输出
+        console.log(a++); 
+        console.log(a-b>0?a:b);
+        console.log(true&&false,true||false,!true); 
+        var str = 'hello word ',num = 10,blean = true,ud,obj={name:'张三',age:20},arr=[1,2,3,4];
+        console.log(typeof str,typeof num,typeof blean,typeof ud,typeof obj,typeof arr);
+        //浮点小数不能用二进制精确存储，
+        //JS不能用==或者===来判断两个浮点数是否相等
+        console.log(0.1+0.2==0.3);
+        //字符类型转换，+将数字转换为字符串，-用能用于数值运算
+        console.log('1'+1,1+'1','11'+1-1);
+        //NaN不是一个数字，isNaN()判断是否是一个数字
+        // NaN与任何值都不相等，包括它自己
+        console.log("wangyao"-1);
+        console.log(NaN==NaN);
+        // 取整函数，向下取整
+        console.log(parseInt(12.9));
+        //如何判断一个变量是不是一个整数？你有什么方法
+        //写一个数7游戏，100个数以内，包含7或者7的倍数不显示
+        var grid = document.createElement('div');
+        grid.className = 'grid';
+
+        for (var i = 1; i <= 100; i++) {
+            if (i % 7 === 0 || String(i).indexOf('7') !== -1) {
+                continue;
+            }
+            var box = document.createElement('div');
+            box.className = 'num';
+            box.textContent = i;
+            grid.appendChild(box);
+        }
+
+        document.querySelector('.container').appendChild(grid);
+    </script>
+</body>
+</html>

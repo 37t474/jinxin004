@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<!--
+  项目：iconfont 图标演示（四）移动端固定底部导航 · SVG Symbol 方式
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  命名说明：自定义 CSS 类名 / id / JS 变量统一使用 jx530_ 前缀；
+    图标库注入的 symbol id（#icon-xxx）为 iconfont 约定，保持原样引用
+  设计说明：视觉延续「线条即图标」的图纸版式；与页3 同构的四项底部导航，
+    图标改用 iconfont.js 注入的 SVG Symbol，页面用 <use> 复用矢量图形；
+    消息项右上角是数字徽章（99+，制图蓝），我的项右上角是红点
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>屏底四项 · SVG 图标导航</title>
+  <style>
+    /* ===== 设计基调：坐标网格纸 + 墨蓝 + 制图蓝（延续页2） ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f7f6f1;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 23px, rgba(29, 95, 191, 0.07) 23px, rgba(29, 95, 191, 0.07) 24px),
+        repeating-linear-gradient(90deg, transparent, transparent 23px, rgba(29, 95, 191, 0.07) 23px, rgba(29, 95, 191, 0.07) 24px);
+      color: #15254a;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.75;
+    }
+
+    ::selection {
+      background: #1d5fbf;
+      color: #f7f6f1;
+    }
+
+    /* 手机视口容器 */
+    .jx530_phone {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    /* ===== 图签页眉 ===== */
+    .jx530_titleblock {
+      margin: 26px 16px 0;
+      border: 1.5px solid #15254a;
+      background: #fdfdfb;
+      padding: 16px 18px;
+      animation: jx530_rise 0.6s ease both;
+    }
+
+    .jx530_titleblock h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .jx530_titleblock h1 small {
+      display: block;
+      font-size: 11px;
+      font-weight: normal;
+      color: #6b7ba0;
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+
+    .jx530_titleblock p {
+      font-size: 12px;
+      color: #45507a;
+      margin-top: 8px;
+    }
+
+    .jx530_titleblock code {
+      font-family: Consolas, monospace;
+      font-size: 11px;
+      background: #f2f5fb;
+      border: 1px solid #c9d4ea;
+      padding: 0 5px;
+      border-radius: 3px;
+    }
+
+    /* ===== 演示说明卡 ===== */
+    .jx530_brief {
+      margin: 16px 16px 0;
+      border: 1px solid #c9d4ea;
+      border-left: 3px solid #1d5fbf;
+      background: #fdfdfb;
+      padding: 14px 18px;
+      animation: jx530_rise 0.6s ease 0.1s both;
+    }
+
+    .jx530_brief h2 {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .jx530_brief p {
+      font-size: 12px;
+      color: #45507a;
+    }
+
+    .jx530_brief b {
+      color: #1d5fbf;
+      font-weight: bold;
+    }
+
+    /* ===== 滚动内容 ===== */
+    .jx530_feed {
+      padding: 16px 16px 110px;
+    }
+
+    .jx530_card {
+      border: 1px solid #c9d4ea;
+      background: #fdfdfb;
+      padding: 15px 18px;
+      margin-bottom: 12px;
+      animation: jx530_rise 0.6s ease both;
+    }
+
+    .jx530_card h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .jx530_card p {
+      font-size: 12px;
+      color: #6b7ba0;
+    }
+
+    /* ===== 底部导航：与页3 同构，图标换成 SVG Symbol ===== */
+    .jx530_tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      height: 62px;
+      background: #fdfdfb;
+      border-top: 1.5px solid #15254a;
+      display: flex;
+      z-index: 10;
+    }
+
+    .jx530_tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      text-decoration: none;
+      color: #6b7ba0;
+      position: relative;
+      transition: color 0.15s;
+    }
+
+    /* SVG 图标：大小交给 width/height，颜色由 fill: currentColor 跟随文字色 */
+    .jx530_tab .jx530_svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+      display: block;
+    }
+
+    .jx530_tab span {
+      font-size: 11px;
+    }
+
+    /* 选中项：翻制图蓝，顶部一道压线 */
+    .jx530_tab-active {
+      color: #1d5fbf;
+    }
+
+    .jx530_tab-active::before {
+      content: "";
+      position: absolute;
+      top: -1.5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 34px;
+      height: 2px;
+      background: #1d5fbf;
+    }
+
+    /* 图标容器作为角标定位基准 */
+    .jx530_tab-icon {
+      position: relative;
+      line-height: 1;
+    }
+
+    /* 数字徽章 */
+    .jx530_badge-num {
+      position: absolute;
+      top: -7px;
+      right: -14px;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 9px;
+      background: #1d5fbf;
+      color: #f7f6f1;
+      font-size: 10px;
+      line-height: 17px;
+      text-align: center;
+      font-weight: bold;
+      font-style: normal;
+      box-shadow: 0 0 0 2px #fdfdfb;
+    }
+
+    /* 红点 */
+    .jx530_badge-dot {
+      position: absolute;
+      top: -3px;
+      right: -7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e0342c;
+      box-shadow: 0 0 0 2px #fdfdfb;
+    }
+
+    /* ===== 页脚链接 ===== */
+    .jx530_footlinks {
+      padding: 4px 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .jx530_back-home,
+    .jx530_crosslink {
+      font-size: 12px;
+      text-decoration: none;
+      color: #15254a;
+      border: 1.5px solid #15254a;
+      background: #fdfdfb;
+      padding: 8px 16px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .jx530_back-home:hover,
+    .jx530_crosslink:hover {
+      background: #1d5fbf;
+      border-color: #1d5fbf;
+      color: #f7f6f1;
+    }
+
+    .jx530_crosslink {
+      border-style: dashed;
+    }
+
+    @keyframes jx530_rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .jx530_titleblock, .jx530_brief, .jx530_card { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="jx530_phone">
+
+    <!-- 图签页眉 -->
+    <header class="jx530_titleblock">
+      <h1>
+        钉在屏底的导航
+        <small>ICONFONT · SVG SYMBOL 方式 · 与字体实现同构</small>
+      </h1>
+      <p>
+        图标来自 <code>font/iconfont.js</code>：脚本把 7 个 <code>viewBox="0 0 1024 1024"</code> 的
+        SVG Symbol 注入本页，再用 <code>&lt;use href="#icon-xihuan"&gt;</code> 复用同一份矢量图形。
+      </p>
+    </header>
+
+    <!-- 演示说明 -->
+    <section class="jx530_brief">
+      <h2>与字体图标的差别</h2>
+      <p>
+        SVG 图标不是文字：大小由 <code>width/height</code> 控制，颜色由 <code>fill: currentColor</code>
+        跟随文字色。导航结构与页3 完全同构——<code>position: fixed</code> 固定屏底、
+        四项 <code>flex: 1</code> 均分自适应。<b>消息</b>带数字徽章，<b>我的</b>带红点。
+      </p>
+    </section>
+
+    <!-- 滚动内容 -->
+    <main class="jx530_feed">
+      <section class="jx530_card">
+        <h3>SVG Symbol · 图纸版式</h3>
+        <p>与「线条即图标」一页同一套设计语言：图形按坐标复用，缩放不失真。</p>
+      </section>
+      <section class="jx530_card">
+        <h3>选中态</h3>
+        <p>「逛逛」处于选中：图标 fill 与文字翻为制图蓝，顶部压一道 2px 墨蓝细线。</p>
+      </section>
+      <section class="jx530_card">
+        <h3>数字徽章</h3>
+        <p>消息项 99+ 徽章取主题制图蓝，红点保持警示红——两种提醒一眼可分。</p>
+      </section>
+      <section class="jx530_card">
+        <h3>use 复用</h3>
+        <p>四个图标引用四个 symbol，同一 id 在页内只存在一份矢量定义。</p>
+      </section>
+      <section class="jx530_card">
+        <h3>继续滚动</h3>
+        <p>内容比屏幕长，正好验证底部导航固定不随页面滚动。</p>
+      </section>
+
+      <!-- 页脚链接 -->
+      <nav class="jx530_footlinks">
+        <a class="jx530_back-home" href="index.html">← 返回首页 index.html</a>
+        <a class="jx530_crosslink" href="iconfont-3.html">同一导航的字体实现 →</a>
+      </nav>
+    </main>
+
+    <!-- ===== 底部导航 ===== -->
+    <nav class="jx530_tabbar">
+      <a class="jx530_tab jx530_tab-active" href="javascript:void(0)">
+        <span class="jx530_tab-icon">
+          <svg class="jx530_svg" aria-hidden="true"><use href="#icon-a-business-icon-Bigpromotion"></use></svg>
+        </span>
+        <span>逛逛</span>
+      </a>
+      <a class="jx530_tab" href="javascript:void(0)">
+        <span class="jx530_tab-icon">
+          <svg class="jx530_svg" aria-hidden="true"><use href="#icon-xihuan"></use></svg>
+        </span>
+        <span>喜欢</span>
+      </a>
+      <a class="jx530_tab" href="javascript:void(0)">
+        <span class="jx530_tab-icon">
+          <svg class="jx530_svg" aria-hidden="true"><use href="#icon-xiaoxi-zhihui"></use></svg>
+          <em class="jx530_badge-num">99+</em>
+        </span>
+        <span>消息</span>
+      </a>
+      <a class="jx530_tab" href="javascript:void(0)">
+        <span class="jx530_tab-icon">
+          <svg class="jx530_svg" aria-hidden="true"><use href="#icon-business-icon-buyers-club-fill"></use></svg>
+          <em class="jx530_badge-dot"></em>
+        </span>
+        <span>我的</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- iconfont Symbol 注入脚本（本地 font 目录） -->
+  <script src="font/iconfont.js"></script>
+
+</body>
+</html>

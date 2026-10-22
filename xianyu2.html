@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!--
+  项目：闲鱼APP 网页元素设计 - 我的（个人中心）页
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>闲鱼 - 我的</title>
+  <link rel="stylesheet" href="xianyu2.css">
+</head>
+<body>
+
+  <!-- 整个手机页面容器 -->
+  <div class="jx-page">
+
+    <!-- ============ 顶部个人信息区 ============ -->
+    <header class="profile">
+      <img class="avatar" src="img/youketouxiang.jpg" alt="头像">
+      <div class="profile-info">
+        <p class="nickname">昵称未填写 <span class="arrow">&gt;</span></p>
+        <p class="yulizhi">鱼力值 405</p>
+      </div>
+      <div class="profile-links">
+        <div class="link-item">
+          <img src="img/bangzhuyukefu.jpg" alt="帮助与客服">
+          <p>帮助与客服</p>
+        </div>
+        <div class="link-item">
+          <span class="gear-icon">⚙</span>
+          <p>设置</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ 开通专属等级横幅 ============ -->
+    <div class="vip-banner">
+      <div class="banner-text">
+        <p class="banner-title">邀您开启专属等级</p>
+        <p class="banner-desc">流量券、红包、寄件券等大礼等你领取</p>
+      </div>
+      <img class="banner-fish" src="img/yaoninkaiqizhuanshudengji(yu).jpg" alt="闲鱼 mascot">
+    </div>
+
+    <!-- ============ 数据统计卡片 ============ -->
+    <div class="card stats-card">
+      <div class="stat-item">
+        <p class="stat-num">1</p>
+        <p class="stat-label">我的收藏</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-num">0</p>
+        <p class="stat-label">历史浏览</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-num">0</p>
+        <p class="stat-label">我的关注</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-num">0</p>
+        <p class="stat-label">红包卡券</p>
+      </div>
+    </div>
+
+    <!-- ============ 我的交易卡片 ============ -->
+    <div class="card">
+      <h2 class="card-title">我的交易</h2>
+      <div class="trade-row">
+        <!-- 只裁出图标部分，文字用 HTML 写，保证对齐 -->
+        <div class="trade-item">
+          <div class="jx-trade-icon"><img src="img/wofabude.jpg" alt="我发布的"></div>
+          <p class="trade-label">我发布的</p>
+        </div>
+        <div class="trade-item">
+          <div class="jx-trade-icon"><img src="img/womaichude.jpg" alt="我卖出的"></div>
+          <p class="trade-label">我卖出的</p>
+        </div>
+        <div class="trade-item">
+          <div class="jx-trade-icon"><img src="img/womaidaode.jpg" alt="我买到的"></div>
+          <p class="trade-label">我买到的</p>
+        </div>
+        <div class="trade-item">
+          <div class="jx-trade-icon jx-trade-icon-ke"><img src="img/wokemaide.jpg" alt="我可卖的"></div>
+          <p class="trade-label">我可卖的</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 闲鱼回收卡片 ============ -->
+    <div class="card recycle-card">
+      <div class="recycle-head">
+        <h2 class="card-title">闲鱼回收</h2>
+        <p class="recycle-sub">免费上门质检，竞拍价更高</p>
+      </div>
+      <div class="recycle-body">
+        <!-- 左边：热门手机回收 -->
+        <div class="recycle-left">
+          <div class="phone-thumb">
+            <img src="img/xianyuhuishou.jpg" alt="热门回收">
+            <span class="hot-badge">热门</span>
+          </div>
+          <div class="recycle-info">
+            <p class="phone-name">iPhone 17 Pro<span class="arrow">&gt;</span></p>
+            <p class="phone-price">预估赚 <span class="price">¥4427</span></p>
+          </div>
+        </div>
+        <!-- 右边：回收品类 -->
+        <div class="recycle-right">
+          <img class="pinlei-img" src="img/huishoupinlei.jpg" alt="回收品类">
+          <div class="recycle-info">
+            <p class="pinlei-num">60+</p>
+            <p class="pinlei-label">回收品类 <span class="arrow">&gt;</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 五个圆形功能入口 ============ -->
+    <div class="entry-row">
+      <div class="entry-item">
+        <div class="entry-icon icon-1"><img src="img/chaojichongfen.jpg" alt="超强擦亮"></div>
+        <p>超强擦亮</p>
+      </div>
+      <div class="entry-item">
+        <div class="entry-icon icon-2"><img src="img/jipiaoyouhui.jpg" alt="托管无忧卖"></div>
+        <p>托管无忧卖</p>
+      </div>
+      <div class="entry-item">
+        <div class="entry-icon icon-3"><img src="img/xianzhixiaofating.jpg" alt="闲鱼小法庭"></div>
+        <p>闲鱼小法庭</p>
+      </div>
+      <div class="entry-item">
+        <div class="entry-icon icon-4"><img src="img/jie.jpg" alt="借钱"></div>
+        <p>借钱</p>
+      </div>
+      <div class="entry-item">
+        <div class="entry-icon icon-5"><img src="img/tongchenggongyi.jpg" alt="闲鱼公约"></div>
+        <p>闲鱼公约</p>
+      </div>
+    </div>
+
+    <!-- ============ 活动卡片区 ============ -->
+    <div class="promo-grid">
+      <!-- 左边大卡片：闲鱼币（占两行） -->
+      <div class="promo-card jx-promo-yellow">
+        <p class="promo-title">闲鱼币 <span class="promo-tag">点击领币 &gt;</span></p>
+        <p class="promo-desc">0.01元兑IP好物</p>
+        <div class="promo-art art-xianyubi"><img src="img/xianyubi.jpg" alt="闲鱼币"></div>
+      </div>
+      <!-- 右边四个小卡片 -->
+      <div class="promo-card promo-green">
+        <p class="promo-title">神奇鱼塘</p>
+        <p class="promo-desc">1分钱领好礼</p>
+        <span class="go-btn">GO &gt;</span>
+        <div class="promo-art art-duihuan"><img src="img/duihuan.jpg" alt="神奇鱼塘"></div>
+      </div>
+      <div class="promo-card promo-purple">
+        <!-- 素材图本身已包含标题和按钮，直接铺满 -->
+        <div class="promo-art art-youxi"><img src="img/xianyuyouxi.jpg" alt="闲鱼游戏"></div>
+      </div>
+      <div class="promo-card promo-cream">
+        <p class="promo-title">现金签到</p>
+        <p class="promo-desc">每天签到领红包</p>
+        <div class="promo-art art-hongbao"><img src="img/hongbao.jpg" alt="红包"></div>
+      </div>
+      <div class="promo-card promo-pink">
+        <p class="promo-title">邀好友赚钱</p>
+        <p class="promo-desc">邀请好友赚现金</p>
+      </div>
+    </div>
+
+    <!-- ============ 底部导航栏 ============ -->
+    <nav class="tabbar">
+      <div class="tab-item">
+        <img src="img/xianyu.jpg" alt="闲鱼">
+        <p>闲鱼</p>
+      </div>
+      <div class="tab-item">
+        <img src="img/tongchengdingwei.jpg" alt="沈阳">
+        <p>沈阳</p>
+      </div>
+      <!-- 中间凸起的卖闲置按钮 -->
+      <div class="tab-item tab-center">
+        <img src="img/maixianzhi.jpg" alt="卖闲置">
+      </div>
+      <div class="tab-item">
+        <img src="img/xiaoxi.jpg" alt="消息">
+        <p>消息</p>
+      </div>
+      <div class="tab-item">
+        <img src="img/wode.jpg" alt="我的">
+        <p>我的</p>
+      </div>
+    </nav>
+
+  </div>
+
+</body>
+</html>

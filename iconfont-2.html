@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<!--
+  项目：iconfont 图标演示（二）Lucide SVG 图标方式 · 制图版式
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  命名说明：CSS 类名 / id / JS 变量统一使用 jx530_ 前缀
+  设计说明：SVG 图标的本质是"按坐标画出来的矢量线条"，因此整页借用
+  工程制图的语言——坐标网格纸、制图蓝、样品角标、图纸标题栏；
+  首屏一支贝塞尔钢笔逐笔绘出（描边生长动画），演示 SVG 是"画"出来的
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>线条即图标 — Lucide SVG 图标</title>
+  <style>
+    /* ===== 设计基调：坐标网格纸 + 墨蓝 + 制图蓝 ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      /* 图纸底 + 24px 淡蓝坐标网格 */
+      background-color: #f7f6f1;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 23px, rgba(29, 95, 191, 0.07) 23px, rgba(29, 95, 191, 0.07) 24px),
+        repeating-linear-gradient(90deg, transparent, transparent 23px, rgba(29, 95, 191, 0.07) 23px, rgba(29, 95, 191, 0.07) 24px);
+      color: #15254a;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.75;
+      padding: 0 20px 56px;
+    }
+
+    ::selection {
+      background: #1d5fbf;
+      color: #f7f6f1;
+    }
+
+    /* ===== 图签：图纸右上角的标题栏 ===== */
+    .jx530_titleblock {
+      max-width: 980px;
+      margin: 30px auto 0;
+      border: 1.5px solid #15254a;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      background: #fdfdfb;
+      animation: jx530_rise 0.6s ease both;
+    }
+
+    .jx530_titleblock-name {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 12px 18px;
+      border-right: 1.5px solid #15254a;
+    }
+
+    .jx530_titleblock-name small {
+      display: block;
+      font-size: 11px;
+      font-weight: normal;
+      color: #6b7ba0;
+      letter-spacing: 0.1em;
+    }
+
+    .jx530_titleblock-spec {
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      color: #6b7ba0;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ===== 首屏：左侧论断，右侧一幅正在绘制的图 ===== */
+    .jx530_hero {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 34px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      animation: jx530_rise 0.6s ease 0.1s both;
+    }
+
+    .jx530_hero-text {
+      flex: 1 1 380px;
+    }
+
+    .jx530_hero-text h1 {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .jx530_hero-text h1 em {
+      font-style: normal;
+      color: #1d5fbf;
+    }
+
+    .jx530_hero-text p {
+      font-size: 13px;
+      color: #45507a;
+      margin-top: 14px;
+      max-width: 42em;
+    }
+
+    .jx530_hero-text code {
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      background: #fdfdfb;
+      border: 1px solid #c9d4ea;
+      padding: 0 5px;
+      border-radius: 3px;
+    }
+
+    /* 大图：一支贝塞尔钢笔，加载时逐笔绘出 */
+    .jx530_hero-figure {
+      position: relative;
+      flex: 0 0 auto;
+      width: 218px;
+      height: 218px;
+      border: 1.5px solid #15254a;
+      background: #fdfdfb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 制图角标：图框四角的定位线 */
+    .jx530_hero-figure::before,
+    .jx530_hero-figure::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+    }
+
+    .jx530_hero-figure::before {
+      top: -8px;
+      left: -8px;
+      border-top: 1.5px solid #1d5fbf;
+      border-left: 1.5px solid #1d5fbf;
+    }
+
+    .jx530_hero-figure::after {
+      bottom: -8px;
+      right: -8px;
+      border-bottom: 1.5px solid #1d5fbf;
+      border-right: 1.5px solid #1d5fbf;
+    }
+
+    .jx530_hero-figure svg {
+      width: 132px;
+      height: 132px;
+      stroke: #15254a;
+      stroke-width: 1.2;
+    }
+
+    .jx530_hero-caption {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      font-family: Consolas, monospace;
+      font-size: 11px;
+      color: #1d5fbf;
+      letter-spacing: 0.04em;
+    }
+
+    /* 描边生长：JS 量出每段路径长度后逐一绘出 */
+    @keyframes jx530_draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes jx530_rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ===== 样品陈列：图纸上的零件，带角标与图号 ===== */
+    .jx530_plate {
+      max-width: 980px;
+      margin: 38px auto 0;
+      animation: jx530_rise 0.6s ease both;
+    }
+
+    .jx530_plate-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      border-bottom: 1.5px solid #15254a;
+      padding-bottom: 10px;
+    }
+
+    .jx530_plate-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .jx530_plate-title code {
+      font-family: Consolas, monospace;
+      font-size: 15px;
+      font-weight: normal;
+      color: #1d5fbf;
+      margin-right: 10px;
+    }
+
+    .jx530_plate-note {
+      font-size: 12px;
+      color: #6b7ba0;
+    }
+
+    .jx530_plate-note code {
+      font-family: Consolas, monospace;
+      font-size: 11px;
+      color: #15254a;
+      background: #fdfdfb;
+      border: 1px solid #c9d4ea;
+      padding: 0 5px;
+      border-radius: 3px;
+    }
+
+    .jx530_rack {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 12px;
+      padding-top: 16px;
+    }
+
+    .jx530_specimen {
+      position: relative;
+      background: #fdfdfb;
+      border: 1px solid #c9d4ea;
+      padding: 24px 6px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      transition: border-color 0.18s, transform 0.18s;
+    }
+
+    /* 每件样品的两个对角制图标记 */
+    .jx530_specimen::before,
+    .jx530_specimen::after {
+      content: "";
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      transition: border-color 0.18s;
+    }
+
+    .jx530_specimen::before {
+      top: 4px;
+      left: 4px;
+      border-top: 1.5px solid #b6c4e0;
+      border-left: 1.5px solid #b6c4e0;
+    }
+
+    .jx530_specimen::after {
+      bottom: 4px;
+      right: 4px;
+      border-bottom: 1.5px solid #b6c4e0;
+      border-right: 1.5px solid #b6c4e0;
+    }
+
+    .jx530_specimen svg {
+      width: 28px;
+      height: 28px;
+      stroke: #15254a;
+      transition: stroke 0.18s;
+    }
+
+    .jx530_specimen:hover {
+      border-color: #1d5fbf;
+      transform: translateY(-2px);
+    }
+
+    .jx530_specimen:hover::before,
+    .jx530_specimen:hover::after {
+      border-color: #1d5fbf;
+    }
+
+    .jx530_specimen:hover svg {
+      stroke: #1d5fbf;
+    }
+
+    .jx530_specimen-name {
+      font-size: 11px;
+      color: #45507a;
+      font-family: Consolas, "PingFang SC", monospace;
+    }
+
+    /* ===== 图纸标题栏：本页图样的统计 ===== */
+    .jx530_sheetbar {
+      max-width: 980px;
+      margin: 38px auto 0;
+      border: 1.5px solid #15254a;
+      background: #fdfdfb;
+      display: flex;
+      flex-wrap: wrap;
+      animation: jx530_rise 0.6s ease both;
+    }
+
+    .jx530_sheetbar-cell {
+      padding: 12px 20px;
+      border-right: 1.5px solid #15254a;
+      font-size: 12px;
+      color: #45507a;
+    }
+
+    .jx530_sheetbar-cell small {
+      display: block;
+      font-size: 10px;
+      color: #6b7ba0;
+      letter-spacing: 0.1em;
+      margin-bottom: 2px;
+    }
+
+    .jx530_sheetbar-cell strong {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1d5fbf;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .jx530_sheetbar-cell:last-child {
+      border-right: none;
+    }
+
+    /* ===== 绘法说明 ===== */
+    .jx530_method {
+      max-width: 980px;
+      margin: 40px auto 0;
+      border-left: 3px solid #1d5fbf;
+      background: #fdfdfb;
+      padding: 22px 26px;
+      animation: jx530_rise 0.6s ease both;
+    }
+
+    .jx530_method h2 {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .jx530_method p {
+      font-size: 13px;
+      color: #45507a;
+      margin: 6px 0;
+    }
+
+    .jx530_method pre {
+      background: #15254a;
+      color: #dce6f8;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.9;
+      padding: 10px 16px;
+      margin: 10px 0;
+      overflow-x: auto;
+    }
+
+    /* ===== 页脚：返回首页 + 对照字体实现 ===== */
+    .jx530_footlinks {
+      max-width: 980px;
+      margin: 30px auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .jx530_back-home,
+    .jx530_crosslink {
+      font-size: 13px;
+      text-decoration: none;
+      color: #15254a;
+      border: 1.5px solid #15254a;
+      background: #fdfdfb;
+      padding: 9px 20px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .jx530_back-home:hover,
+    .jx530_crosslink:hover {
+      background: #1d5fbf;
+      border-color: #1d5fbf;
+      color: #f7f6f1;
+    }
+
+    .jx530_crosslink {
+      border-style: dashed;
+    }
+
+    /* 无障碍：尊重系统的"减少动态效果"设置 */
+    @media (prefers-reduced-motion: reduce) {
+      .jx530_titleblock, .jx530_hero, .jx530_plate, .jx530_sheetbar, .jx530_method {
+        animation: none;
+      }
+      .jx530_hero-figure svg path {
+        stroke-dasharray: none !important;
+        stroke-dashoffset: 0 !important;
+        animation: none !important;
+      }
+      .jx530_specimen, .jx530_specimen svg {
+        transition: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .jx530_hero-text h1 { font-size: 32px; }
+      .jx530_hero-figure { width: 170px; height: 170px; }
+      .jx530_hero-figure svg { width: 100px; height: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 图签 ===== -->
+  <header class="jx530_titleblock">
+    <div class="jx530_titleblock-name">
+      线条即图标
+      <small>LUCIDE · SVG 方式</small>
+    </div>
+    <div class="jx530_titleblock-spec">v0.462.0 · 本地化 lucide.min.js</div>
+  </header>
+
+  <!-- ===== 首屏 ===== -->
+  <section class="jx530_hero">
+    <div class="jx530_hero-text">
+      <h1>每一笔都落在<br><em>坐标</em>上</h1>
+      <p>
+        SVG 图标不是字形，而是一段按 24×24 视口坐标绘出的矢量路径。页面先写占位元素
+        <code>&lt;i data-lucide="pen-tool"&gt;</code>，加载本地化的 <code>lucide.min.js</code> 后调用
+        <code>lucide.createIcons()</code>，脚本将其替换为真正的内联 <code>&lt;svg&gt;</code>。
+        尺寸交给 CSS 的 width/height，线条颜色默认取 currentColor——右侧的钢笔正在逐笔绘出，可以回看。
+      </p>
+    </div>
+    <figure class="jx530_hero-figure">
+      <i data-lucide="pen-tool"></i>
+      <figcaption class="jx530_hero-caption">viewBox 0 0 24 24</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== 第一版样品：基础操作 ===== -->
+  <section class="jx530_plate">
+    <div class="jx530_plate-head">
+      <h2 class="jx530_plate-title"><code>fig.1</code>基础操作</h2>
+      <p class="jx530_plate-note">引用：<code>&lt;i data-lucide="图标名"&gt;</code>，加载后由 JS 替换为 SVG</p>
+    </div>
+    <div class="jx530_rack">
+      <div class="jx530_specimen"><i data-lucide="house"></i><span class="jx530_specimen-name">house</span></div>
+      <div class="jx530_specimen"><i data-lucide="search"></i><span class="jx530_specimen-name">search</span></div>
+      <div class="jx530_specimen"><i data-lucide="camera"></i><span class="jx530_specimen-name">camera</span></div>
+      <div class="jx530_specimen"><i data-lucide="settings"></i><span class="jx530_specimen-name">settings</span></div>
+      <div class="jx530_specimen"><i data-lucide="user"></i><span class="jx530_specimen-name">user</span></div>
+      <div class="jx530_specimen"><i data-lucide="trash-2"></i><span class="jx530_specimen-name">trash-2</span></div>
+      <div class="jx530_specimen"><i data-lucide="download"></i><span class="jx530_specimen-name">download</span></div>
+      <div class="jx530_specimen"><i data-lucide="share-2"></i><span class="jx530_specimen-name">share-2</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 第二版样品：生活场景 ===== -->
+  <section class="jx530_plate">
+    <div class="jx530_plate-head">
+      <h2 class="jx530_plate-title"><code>fig.2</code>生活场景</h2>
+      <p class="jx530_plate-note">换色只改 CSS <code>color</code>，线宽用 <code>stroke-width</code> 调整</p>
+    </div>
+    <div class="jx530_rack">
+      <div class="jx530_specimen"><i data-lucide="heart"></i><span class="jx530_specimen-name">heart</span></div>
+      <div class="jx530_specimen"><i data-lucide="star"></i><span class="jx530_specimen-name">star</span></div>
+      <div class="jx530_specimen"><i data-lucide="bell"></i><span class="jx530_specimen-name">bell</span></div>
+      <div class="jx530_specimen"><i data-lucide="shopping-cart"></i><span class="jx530_specimen-name">shopping-cart</span></div>
+      <div class="jx530_specimen"><i data-lucide="calendar"></i><span class="jx530_specimen-name">calendar</span></div>
+      <div class="jx530_specimen"><i data-lucide="mail"></i><span class="jx530_specimen-name">mail</span></div>
+      <div class="jx530_specimen"><i data-lucide="phone"></i><span class="jx530_specimen-name">phone</span></div>
+      <div class="jx530_specimen"><i data-lucide="map-pin"></i><span class="jx530_specimen-name">map-pin</span></div>
+      <div class="jx530_specimen"><i data-lucide="music"></i><span class="jx530_specimen-name">music</span></div>
+      <div class="jx530_specimen"><i data-lucide="image"></i><span class="jx530_specimen-name">image</span></div>
+      <div class="jx530_specimen"><i data-lucide="thumbs-up"></i><span class="jx530_specimen-name">thumbs-up</span></div>
+      <div class="jx530_specimen"><i data-lucide="wifi"></i><span class="jx530_specimen-name">wifi</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 图纸标题栏：图样统计 ===== -->
+  <section class="jx530_sheetbar">
+    <div class="jx530_sheetbar-cell">
+      <small>渲染方式</small>
+      占位元素 → 内联 SVG
+    </div>
+    <div class="jx530_sheetbar-cell">
+      <small>本页图样</small>
+      <strong id="jx530_icon-count">0</strong> 件
+    </div>
+    <div class="jx530_sheetbar-cell">
+      <small>统计变量</small>
+      jx530_iconCount
+    </div>
+  </section>
+
+  <!-- ===== 绘法说明 ===== -->
+  <section class="jx530_method">
+    <h2>SVG 图标是怎样画出来的</h2>
+    <p>一、引入本地化脚本（已随页面下载到 cdn 目录，无需外网）：</p>
+    <pre>&lt;script src="cdn/lucide/lucide.min.js"&gt;&lt;/script&gt;</pre>
+    <p>二、写下占位元素：</p>
+    <pre>&lt;i data-lucide="house"&gt;&lt;/i&gt;</pre>
+    <p>三、页面加载后执行替换，占位元素变成内联 &lt;svg&gt;：</p>
+    <pre>&lt;script&gt;
+  lucide.createIcons();
+&lt;/script&gt;</pre>
+  </section>
+
+  <!-- ===== 页脚链接 ===== -->
+  <nav class="jx530_footlinks">
+    <a class="jx530_back-home" href="index.html">← 返回首页 index.html</a>
+    <a class="jx530_crosslink" href="iconfont-1.html">对照另一种实现：字形即图标（字体） →</a>
+  </nav>
+
+  <!-- 本地化 Lucide 脚本 -->
+  <script src="cdn/lucide/lucide.min.js"></script>
+  <script>
+    // 把所有 data-lucide 占位元素替换为内联 SVG
+    lucide.createIcons();
+
+    // 统计样品区渲染出的 SVG 图标数量（JS 变量按规则使用 jx530_ 前缀；首屏钢笔是展示品，不计入）
+    var jx530_iconCount = document.querySelectorAll('.jx530_specimen svg.lucide').length;
+    document.getElementById('jx530_icon-count').textContent = jx530_iconCount;
+
+    // 首屏钢笔的描边生长：量出每段路径长度，再逐笔绘出
+    var jx530_heroPaths = document.querySelectorAll('.jx530_hero-figure svg path');
+    jx530_heroPaths.forEach(function (jx530_path, jx530_i) {
+      var jx530_len = jx530_path.getTotalLength();
+      jx530_path.style.strokeDasharray = jx530_len + ' ' + jx530_len;
+      jx530_path.style.strokeDashoffset = jx530_len;
+      jx530_path.style.animation = 'jx530_draw 1.3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+      jx530_path.style.animationDelay = (0.3 + jx530_i * 0.14) + 's';
+    });
+  </script>
+
+</body>
+</html>

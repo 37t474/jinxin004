@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>H5语义布局+溢出/隐藏过渡动画 作业</title>
+  <link rel="stylesheet" href="zuoye.css">
+</head>
+<body>
+
+  <!-- 页面顶部头部区域 → <header> -->
+  <header>
+    <p>H5语义布局 + 溢出/隐藏过渡动画 实践作业</p>
+  </header>
+
+
+  <!-- 页面唯一主要内容区 → <main> -->
+  <main class="container">
+
+    <!-- 主内容区 792px -->
+    <section class="main-content">
+
+      <!-- ============ 第一部分：看代码找错（20分） ============ -->
+      <div id="part1" class="box">
+        <h2>第一部分：看代码找错（20分）</h2>
+        <p><b>Bug1：图片放大跑出卡片，盖住旁边卡片</b></p>
+        <p>错误位置：li 缺少 overflow:hidden</p>
+        <p>修改后：li 添加 <code>overflow: hidden;</code></p>
+
+        <p><b>Bug2：文字展开只有移入有动画，移出无过渡</b></p>
+        <p>错误位置：transition 写在 :hover 上</p>
+        <p>修改后：把 transition 移到默认选择器上，移入移出都有动画</p>
+
+        <p><b>Bug3：卡片布局排版错乱</b></p>
+        <p>错误位置：使用了 float:left 浮动布局</p>
+        <p>修改后：改用 <code>display: flex; flex-wrap: wrap;</code>（禁止float）</p>
+      </div>
+
+      <!-- ============ 第二部分：补全代码（40分） ============ -->
+      <div id="part2" class="box">
+        <h2>第二部分：补全代码（40分）</h2>
+
+        <!-- 2.1 语义标签填空 -->
+        <h3>2.1 语义标签填空</h3>
+        <p>页面顶部头部区域 → &lt;<b>header</b>&gt;</p>
+        <p>导航条 → &lt;<b>nav</b>&gt;</p>
+        <p>页面唯一主要内容区 → &lt;<b>main</b>&gt;</p>
+        <p>侧边栏附属内容 → &lt;<b>aside</b>&gt;</p>
+        <p>页面底部版权页脚 → &lt;<b>footer</b>&gt;</p>
+
+        <!-- 2.2 卡片动画补全（6张图文卡片） -->
+        <h3>2.2 卡片动画补全</h3>
+        <ul class="card-wrap">
+          <!-- 每张卡片：overflow裁切 + 子绝父相 + transition过渡 -->
+          <li class="card-item">
+            <img src="./img/1.jpg" alt="图片1">
+            <div class="card-text">卡片1文字内容，悬浮展开</div>
+          </li>
+          <li class="card-item">
+            <img src="./img/2.jpg" alt="图片2">
+            <div class="card-text">卡片2文字内容，悬浮展开</div>
+          </li>
+          <li class="card-item">
+            <img src="./img/3.jpg" alt="图片3">
+            <div class="card-text">卡片3文字内容，悬浮展开</div>
+          </li>
+          <li class="card-item">
+            <img src="./img/4.jpg" alt="图片4">
+            <div class="card-text">卡片4文字内容，悬浮展开</div>
+          </li>
+          <li class="card-item">
+            <img src="./img/5.jpg" alt="图片5">
+            <div class="card-text">卡片5文字内容，悬浮展开</div>
+          </li>
+          <li class="card-item">
+            <img src="./img/6.jpg" alt="图片6">
+            <div class="card-text">卡片6文字内容，悬浮展开</div>
+          </li>
+        </ul>
+
+        <!-- 2.2 填空答案 -->
+        <p>① 防止图片溢出li容器 → li添加：<code>overflow: hidden;</code></p>
+        <p>② 子绝父相，文字条定位在底部 → li添加：<code>position: relative;</code></p>
+        <p>③ 放大图片两个选择器：<code>.card-item img</code> 和 <code>.card-item:hover img</code></p>
+        <p>④ transition写在<b>默认选择器</b>上。因为写在hover上移出时hover失效无动画，写在默认选择器移入移出都有过渡。</p>
+        <p>⑤ 奇数卡片文字铺满 → 伪类：<code>.card-item:nth-child(odd):hover</code></p>
+
+        <!-- 2.3 flex两栏布局填空 -->
+        <h3>2.3 flex两栏布局填空</h3>
+        <p>父容器开启flex：<code>display: flex;</code></p>
+        <p>设置两栏间隙8px（禁止margin）：<code>gap: 8px;</code></p>
+      </div>
+
+      <!-- ============ 第三部分：手写原理简答（25分） ============ -->
+      <div id="part3" class="box">
+        <h2>第三部分：手写原理简答（25分）</h2>
+
+        <!-- 手写图片 -->
+        <img src="./img/shouxie.jpg" alt="手写原理简答图" class="shouxie-img">
+
+    </section>
+
+    <!-- 侧边栏附属内容 → <aside> 400px -->
+    <aside class="sidebar">
+      <h3>侧边栏</h3>
+      <p>附属内容区域</p>
+      <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+      </ul>
+    </aside>
+
+  </main>
+
+  <!-- 页面底部版权页脚 → <footer> -->
+  <footer>
+    <p>H5语义布局作业</p>
+  </footer>
+
+  <!-- 第四部分：扩展挑战 回到顶部按钮（纯CSS无JS） -->
+  <a href="#" class="back-top">回到顶部</a>
+
+</body>
+</html>

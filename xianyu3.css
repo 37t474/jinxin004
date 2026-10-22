@@ -1,0 +1,391 @@
+/* ============ 闲鱼首页样式 ============ */
+/*
+  项目：闲鱼APP 网页元素设计 - 首页
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  命名说明：类名前缀 jx 为姓名"金鑫"拼音缩写
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e8e8e8;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 手机页面容器 */
+.jx-page {
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding-bottom: 70px;            /* 底部导航栏高度 */
+}
+
+/* ============ 顶部导航栏 ============ */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 8px;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-item {
+  font-size: 17px;
+  color: #333333;
+  text-decoration: none;
+  font-weight: normal;
+  position: relative;
+}
+
+/* 当前选中的「首页」：加粗 + 下划线 */
+.nav-item.active {
+  font-weight: 900;
+  color: #111111;
+}
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 3px;
+  background-color: #111111;
+  border-radius: 2px;
+}
+
+/* 来捡漏红色标签 */
+.jianlou-badge {
+  height: 18px;
+  vertical-align: middle;
+  mix-blend-mode: multiply;
+}
+
+/* 右上角签到 */
+.qiandao img {
+  height: 44px;
+  display: block;
+}
+
+/* ============ 搜索栏 ============ */
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin: 6px 16px 12px;
+  padding: 8px 10px;
+  background-color: #f5f5f5;
+  border-radius: 22px;
+  height: 40px;
+}
+
+.search-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  mix-blend-mode: multiply;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.camera-icon {
+  width: 22px;
+  height: 22px;
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+
+.search-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background-color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.search-btn img {
+  width: 16px;
+  height: 16px;
+  filter: invert(1);        /* 黑色放大镜图标变白 */
+}
+
+/* ============ 分类筛选标签 ============ */
+.filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 16px 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.filter-tabs a {
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+}
+
+.filter-active {
+  font-weight: 900;
+  color: #111 !important;
+  position: relative;
+}
+
+.filter-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 3px;
+  background-color: #111;
+  border-radius: 2px;
+}
+
+.filter-more {
+  font-size: 14px;
+  color: #333;
+  margin-left: auto;
+}
+
+/* ============ 分类图标网格 ============ */
+.jx-category-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);  /* 每行 5 个 */
+  gap: 6px 0;
+  padding: 14px 8px 10px;
+}
+
+.cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cat-item img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.cat-item p {
+  font-size: 12px;
+  color: #333;
+  margin-top: 6px;
+}
+
+/* ============ 商品卡片列表 ============ */
+.product-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;     /* 两列布局 */
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.jx-product-card {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.product-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;               /* 正方形图片 */
+  overflow: hidden;
+}
+
+.product-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 包邮标签 */
+.tag-baoyou {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  background-color: #ffd21e;
+  color: #111;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tag-baoyou.small {
+  position: static;
+  display: inline-block;
+  margin: 8px 8px 0;
+}
+
+/* 距离标签 */
+.location-tag {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  color: #fff;
+  font-size: 11px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.product-info {
+  padding: 0 8px 10px;
+}
+
+.product-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  margin-top: 6px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-desc {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.product-price {
+  font-size: 18px;
+  font-weight: 900;
+  color: #ff4400;
+  margin-top: 6px;
+}
+
+.want-count {
+  font-size: 11px;
+  color: #999;
+  font-weight: normal;
+}
+
+.product-seller {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #666;
+}
+
+.star {
+  color: #ffb300;
+  font-size: 10px;
+}
+
+.product-tags {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.tag-zan {
+  background-color: #ff4400;
+  color: #fff;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+
+.tag-shop {
+  background-color: #fff0e6;
+  color: #ff4400;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+
+.original-price {
+  font-size: 12px;
+  color: #ff4400;
+  font-weight: bold;
+  margin-top: 6px;
+}
+
+.price-badge {
+  display: inline-block;
+  margin-top: 6px;
+  background: linear-gradient(90deg, #ff7a18, #ff4400);
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ============ 底部导航栏 ============ */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  display: flex;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-item img {
+  width: 26px;
+  height: 26px;
+  mix-blend-mode: multiply;
+}
+
+.tab-item p {
+  font-size: 11px;
+  color: #333;
+  margin-top: 3px;
+}
+
+/* 中间凸起的卖闲置按钮 */
+.tab-center img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-top: -22px;
+  mix-blend-mode: normal;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+}

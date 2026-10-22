@@ -1,0 +1,139 @@
+/* ============ 闲鱼页面样式 ============ */
+/*
+  项目：闲鱼APP 网页元素设计 - 卖闲置发布页
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  命名说明：类名前缀 jx 为姓名"金鑫"拼音缩写
+*/
+
+/* 全局重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e8e8e8;          /* 页面外的背景色 */
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 手机页面容器：限制最大宽度，居中显示 */
+.jx-page {
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 0 20px 100px;              /* 底部留白，避免内容被关闭按钮挡住 */
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============ 顶部标题区 ============ */
+.top-area {
+  /* 顶部黄色渐变，向下过渡到白色 */
+  background: linear-gradient(180deg, #ffe843 0%, #fffbe0 45%, #ffffff 100%);
+  margin: 0 -20px;                    /* 抵消 .jx-page 的左右内边距，让渐变铺满 */
+  padding: 60px 20px 80px;
+}
+
+.main-title {
+  font-size: 38px;
+  font-weight: 900;
+  color: #111111;
+  letter-spacing: 2px;
+}
+
+.sub-title {
+  display: inline-block;              /* 让背景色只包住文字 */
+  margin-top: 10px;
+  padding: 4px 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #333333;
+  background: linear-gradient(90deg, #ffe843, #fff59d);
+  border-radius: 4px;
+}
+
+/* ============ 区域标题（自己卖 / 平台卖） ============ */
+.sell-section {
+  margin-top: 28px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: #111111;
+  margin-bottom: 14px;
+}
+
+/* ============ 卡片通用样式 ============ */
+.card {
+  display: flex;                      /* 图标和文字横向排列 */
+  align-items: center;                /* 垂直居中 */
+  padding: 18px 16px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+/* 黄色卡片（发闲置） */
+.jx-card-yellow {
+  background: linear-gradient(135deg, #fffbe0, #fff3b0);
+}
+
+/* 灰色卡片（一键转卖 / 发服务 / 闲鱼回收） */
+.card-gray {
+  background-color: #f5f5f5;
+}
+
+/* 左右两个半宽卡片 */
+.card-row {
+  display: flex;
+  gap: 12px;                          /* 两个卡片之间的间距 */
+}
+
+.card-half {
+  flex: 1;                            /* 两个卡片平分一行 */
+}
+
+/* 卡片图标 */
+.card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  margin-right: 12px;
+  flex-shrink: 0;                     /* 图标不被压缩 */
+  /* 图标素材是白底图，用正片叠底让白色融入卡片背景 */
+  mix-blend-mode: multiply;
+}
+
+/* 卡片文字 */
+.card-name {
+  font-size: 17px;
+  font-weight: bold;
+  color: #111111;
+  margin-bottom: 4px;
+}
+
+.card-desc {
+  font-size: 12px;
+  color: #999999;
+}
+
+/* ============ 底部关闭按钮 ============ */
+.jx-close-btn {
+  position: fixed;                    /* 固定在屏幕底部 */
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);        /* 水平居中 */
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+}
+
+.jx-close-btn img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;                 /* 裁成圆形 */
+  /* 白底关闭图标融入页面背景 */
+  mix-blend-mode: multiply;
+}

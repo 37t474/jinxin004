@@ -2,7 +2,8 @@
 /*
   项目：闲鱼APP 网页元素设计 - 我的（个人中心）页
   学号：24001010530  姓名：金鑫  班级：计算机24005
-  命名说明：类名前缀 jx 为姓名"金鑫"拼音缩写
+  命名说明：类名前缀 jx 为姓名"金鑫"拼音缩写；
+    底部导航新增类名以 jx530- 前缀命名（jx530- 前缀规则沿用项目约定）
 */
 
 /* 全局重置 */
@@ -529,4 +530,64 @@ body {
   margin-top: -22px;                  /* 向上凸起 */
   mix-blend-mode: normal;             /* 黄色按钮不需要融入背景 */
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ============ 字体图标版底部导航（jx530- 前缀，金鑫 24001010530） ============ */
+/* 固定在屏底，flex 五等分自适应宽度 */
+.jx530-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  display: flex;
+  z-index: 10;
+}
+
+.jx530-tab {
+  flex: 1;                              /* 五项均分，宽度随屏幕自适应 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #999;                          /* 未选中：灰色 */
+  transition: color 0.15s;
+}
+
+.jx530-tab .iconfont {
+  font-size: 24px;                      /* 字体图标的大小 = 字号 */
+  line-height: 1;
+}
+
+.jx530-tab-label {
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+/* 选中项：闲鱼黄 */
+.jx530-tab-active {
+  color: #ffd21e;
+}
+
+/* 中间凸起的卖闲置按钮：黄色圆底 + 白色加号 */
+.jx530-tab-center {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #ffd21e;
+  margin-top: -22px;                    /* 负外边距向上凸出导航栏 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.jx530-tab-center .iconfont {
+  font-size: 26px;
+  color: #fff;
 }

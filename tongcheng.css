@@ -1,0 +1,222 @@
+/* ============ 闲鱼「同城」页面样式 ============ */
+/*
+  项目：闲鱼APP 网页元素设计 - 同城页
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  命名说明：类名统一以 jx530- 前缀命名（项目约定，字母开头保证 CSS/JS 合法）
+*/
+
+/* 全局重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f5f5;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 手机页面容器：限宽居中 */
+.jx530-page {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding-bottom: 70px;               /* 给固定导航留出空间 */
+}
+
+/* ============ 顶部标题栏 ============ */
+.jx530-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, #ffe27a 0%, #ffd21e 100%);
+}
+
+.jx530-topbar h1 {
+  font-size: 19px;
+  color: #333;
+}
+
+.jx530-topbar h1 .iconfont {
+  font-size: 20px;
+  margin-right: 6px;
+}
+
+.jx530-city {
+  font-size: 13px;
+  color: #666;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 3px 12px;
+}
+
+/* ============ 同城分类：四等分横条 ============ */
+.jx530-cats {
+  display: flex;
+  background-color: #fff;
+  padding: 14px 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.jx530-cat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #333;
+  text-decoration: none;
+}
+
+.jx530-cat .iconfont {
+  font-size: 22px;
+  color: #ffd21e;
+}
+
+/* ============ 同城好物列表 ============ */
+.jx530-goods {
+  padding: 12px 16px 20px;
+}
+
+.jx530-goods-title {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+.jx530-goods-item {
+  display: flex;
+  gap: 12px;
+  background-color: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.jx530-goods-item img {
+  width: 86px;
+  height: 86px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.jx530-goods-info {
+  flex: 1;
+  min-width: 0;                       /* 允许文字省略 */
+}
+
+.jx530-goods-info h3 {
+  font-size: 14px;
+  font-weight: normal;
+  color: #333;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;              /* 标题只显示一行 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.jx530-goods-dist {
+  font-size: 11px;
+  color: #999;
+  margin-top: 6px;
+}
+
+.jx530-goods-dist .iconfont {
+  font-size: 11px;
+  margin-right: 2px;
+}
+
+.jx530-goods-price {
+  font-size: 16px;
+  color: #ff4400;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+/* 返回首页链接 */
+.jx530-home-link {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.jx530-home-link a {
+  font-size: 12px;
+  color: #666;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 6px 16px;
+}
+
+.jx530-home-link a:hover {
+  color: #ffd21e;
+  border-color: #ffd21e;
+}
+
+/* ============ 字体图标版底部导航（jx530- 前缀，金鑫 24001010530） ============ */
+/* 固定在屏底，flex 五等分自适应宽度 */
+.jx530-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  display: flex;
+  z-index: 10;
+}
+
+.jx530-tab {
+  flex: 1;                              /* 五项均分，宽度随屏幕自适应 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #999;                          /* 未选中：灰色 */
+  transition: color 0.15s;
+}
+
+.jx530-tab .iconfont {
+  font-size: 24px;                      /* 字体图标的大小 = 字号 */
+  line-height: 1;
+}
+
+.jx530-tab-label {
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+/* 选中项：闲鱼黄 */
+.jx530-tab-active {
+  color: #ffd21e;
+}
+
+/* 中间凸起的卖闲置按钮：黄色圆底 + 白色加号 */
+.jx530-tab-center {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #ffd21e;
+  margin-top: -22px;                    /* 负外边距向上凸出导航栏 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.jx530-tab-center .iconfont {
+  font-size: 26px;
+  color: #fff;
+}

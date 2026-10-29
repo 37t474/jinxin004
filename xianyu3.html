@@ -2,6 +2,8 @@
 <!--
   项目：闲鱼APP 网页元素设计 - 首页
   学号：24001010530  姓名：金鑫  班级：计算机24005
+  导航说明：底部导航使用 iconfont 字体图标（font xianyu/ 目录），
+    新增类名以 jx530- 前缀命名；五项页面互链，当前页"首页"高亮
 -->
 <html lang="zh-CN">
 <head>
@@ -9,6 +11,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>闲鱼 - 首页</title>
   <link rel="stylesheet" href="xianyu3.css">
+  <!-- 闲鱼专属字体图标样式（含 @font-face 字体文件） -->
+  <link rel="stylesheet" href="font xianyu/iconfont.css">
 </head>
 <body>
 
@@ -164,28 +168,29 @@
 
     </div>
 
-    <!-- ============ 底部导航栏 ============ -->
-    <nav class="tabbar">
-      <div class="tab-item">
-        <img src="img/xianyu.jpg" alt="闲鱼">
-        <p>闲鱼</p>
-      </div>
-      <div class="tab-item">
-        <img src="img/tongchengdingwei.jpg" alt="沈阳">
-        <p>沈阳</p>
-      </div>
-      <!-- 中间凸起的卖闲置按钮 -->
-      <div class="tab-item tab-center">
-        <img src="img/maixianzhi.jpg" alt="卖闲置">
-      </div>
-      <div class="tab-item">
-        <img src="img/xiaoxi.jpg" alt="消息">
-        <p>消息</p>
-      </div>
-      <div class="tab-item">
-        <img src="img/wode.jpg" alt="我的">
-        <p>我的</p>
-      </div>
+    <!-- ============ 底部导航栏（iconfont 字体图标版，固定+自适应五等分） ============ -->
+    <nav class="jx530-tabbar">
+      <a class="jx530-tab jx530-tab-active" href="xianyu3.html">
+        <span class="iconfont icon-xianyu-weixuanzhong"></span>
+        <span class="jx530-tab-label">首页</span>
+      </a>
+      <a class="jx530-tab" href="tongcheng.html">
+        <span class="iconfont icon-dingwei"></span>
+        <span class="jx530-tab-label">同城</span>
+      </a>
+      <!-- 中间凸起的卖闲置按钮：黄色圆底 + 白色加号 -->
+      <a class="jx530-tab" href="xianyu.html">
+        <span class="jx530-tab-center"><span class="iconfont icon-xianyu-xiangqingguanzhu"></span></span>
+        <span class="jx530-tab-label">卖闲置</span>
+      </a>
+      <a class="jx530-tab" href="xiaoxi.html">
+        <span class="iconfont icon-xiaoxi"></span>
+        <span class="jx530-tab-label">消息</span>
+      </a>
+      <a class="jx530-tab" href="xianyu2.html">
+        <span class="iconfont icon-wode"></span>
+        <span class="jx530-tab-label">我的</span>
+      </a>
     </nav>
 
   </div>

@@ -1,0 +1,44 @@
+{
+  "id": "5246732",
+  "name": "xianyu",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8288834",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e847",
+      "unicode_decimal": 59463
+    },
+    {
+      "icon_id": "19949534",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "37288933",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "38245657",
+      "name": "闲鱼-未选中-copy",
+      "font_class": "xianyu-weixuanzhong",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "44480696",
+      "name": "闲鱼-详情关注",
+      "font_class": "xianyu-xiangqingguanzhu",
+      "unicode": "e70a",
+      "unicode_decimal": 59146
+    }
+  ]
+}

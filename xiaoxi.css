@@ -1,0 +1,190 @@
+/* ============ 闲鱼「消息」页面样式（SVG 导航版） ============ */
+/*
+  项目：闲鱼APP 网页元素设计 - 消息页
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  命名说明：类名统一以 jx530- 前缀命名（项目约定，字母开头保证 CSS/JS 合法）
+*/
+
+/* 全局重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f5f5;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 手机页面容器：限宽居中 */
+.jx530-page {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding-bottom: 70px;               /* 给固定导航留出空间 */
+}
+
+/* ============ 顶部标题栏 ============ */
+.jx530-topbar {
+  padding: 14px 16px;
+  background: linear-gradient(180deg, #ffe27a 0%, #ffd21e 100%);
+}
+
+.jx530-topbar h1 {
+  font-size: 19px;
+  color: #333;
+}
+
+/* ============ 消息列表 ============ */
+.jx530-msglist {
+  padding: 12px 16px 20px;
+}
+
+.jx530-msg {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+/* 消息头像：彩色圆底 + SVG 图标（SVG 大小由宽高控制） */
+.jx530-msg-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.jx530-msg-avatar svg {
+  width: 22px;
+  height: 22px;
+  fill: #fff;                         /* SVG 图标颜色用 fill 控制 */
+}
+
+.jx530-msg-avatar-sys   { background-color: #ffd21e; }
+.jx530-msg-avatar-like  { background-color: #ff7a45; }
+.jx530-msg-avatar-buyer { background-color: #4a90d9; }
+.jx530-msg-avatar-loc   { background-color: #52c41a; }
+.jx530-msg-avatar-home  { background-color: #b37feb; }
+
+.jx530-msg-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.jx530-msg-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.jx530-msg-head h3 {
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}
+
+.jx530-msg-head time {
+  font-size: 11px;
+  color: #bbb;
+  flex-shrink: 0;
+}
+
+.jx530-msg-body p {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+  white-space: nowrap;                /* 摘要一行，超出省略 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============ 返回首页链接 ============ */
+.jx530-home-link {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.jx530-home-link a {
+  font-size: 12px;
+  color: #666;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 6px 16px;
+}
+
+.jx530-home-link a:hover {
+  color: #ffd21e;
+  border-color: #ffd21e;
+}
+
+/* ============ SVG Symbol 版底部导航（jx530- 前缀，金鑫 24001010530） ============ */
+/* 固定在屏底，flex 五等分自适应宽度；与字体版类名同构，图标换成 <use> 引用 */
+.jx530-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  display: flex;
+  z-index: 10;
+}
+
+.jx530-tab {
+  flex: 1;                              /* 五项均分，宽度随屏幕自适应 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #999;                          /* 未选中：灰色，SVG 用 fill: currentColor 跟随 */
+  transition: color 0.15s;
+}
+
+/* SVG 图标：大小交给宽高，颜色 fill: currentColor 跟随 .jx530-tab 的 color */
+.jx530-svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  display: block;
+}
+
+.jx530-tab-label {
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+/* 选中项：闲鱼黄 */
+.jx530-tab-active {
+  color: #ffd21e;
+}
+
+/* 中间凸起的卖闲置按钮：黄色圆底 + 白色加号 */
+.jx530-tab-center {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #ffd21e;
+  margin-top: -22px;                    /* 负外边距向上凸出导航栏 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.jx530-tab-center .jx530-svg {
+  width: 26px;
+  height: 26px;
+  fill: #fff;                           /* 白色加号 */
+}

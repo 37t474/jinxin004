@@ -108,3 +108,69 @@ gitee私人令牌 [已脱敏，12位以db84开头，完整令牌保存在 SKILL.
   3. 创建后按该 skill 执行一次首次提交推送作为验证。
 
 ---
+
+## 2026-10-22 15:00:33
+
+- **模型**：GLM-5.3-Flash
+- **提示词**：
+
+```text
+创建skill:提交项目：使用git commit并push当前项目到
+https://gitee.com/jin-jinjinjin/gaojiwangye.git
+```
+
+- **执行内容**：检测到与 14:52 的提示词重复——同名项目级 skill `gitee-submit` 已存在于
+  `d:\qianduan\.trae\skills\gitee-submit\`（含令牌与推送流程，首次提交 768b008 已验证推送成功），
+  按 skill-creator 规范不重复创建、不覆盖，仅报告现状。
+
+---
+
+## 2026-10-25 15:30:20
+
+- **模型**：GLM-5.3-Flash
+- **提示词**：
+
+```text
+我把闲鱼（首页），（同城），卖闲置，消息，我的这 5 个图标下载好放到了一个叫font xianyu的文件夹里了，根据这个项目指导书帮我完成我的闲鱼页面修改
+```
+
+- **执行内容**：按《高级网页设计I 实验指导书-图像解决方案》（docx 已解析）完成闲鱼三级项目的下导航：
+  1. 素材：`font xianyu/` iconfont 包（5 图标：e600 房子=首页、e847 定位=同城、e70a 加号=卖闲置、e658 信封=消息、e60b 人形=我的），含字体文件与 iconfont.js（SVG Symbol）两种技术素材。
+  2. 字体图标版导航：替换 xianyu3.html（首页高亮）、xianyu2.html（我的高亮）的图片版 tabbar；新建 tongcheng.html（同城高亮）。
+  3. SVG Symbol 版导航：新建 xiaoxi.html（消息高亮），满足指导书"两种技术"要求。
+  4. 导航要求落实：flex 均分自适应宽度、position:fixed 固定、CSS 修饰（选中态黄色）、中间卖闲置凸起按钮、页面互链；xianyu.html（发布弹层）保持关闭按钮原样。
+  5. 新类名遵循 jx530- 前缀；学号姓名注释、返回首页链接照旧。
+
+---
+
+## 2026-10-25 16:20:33
+
+- **模型**：GLM-5.3-Flash
+- **提示词**：
+
+```text
+这个东西很奇怪，可以去掉吗
+```
+
+- **执行内容**：按用户截图圈选，删除 xiaoxi.html 中「本页导航是 SVG 画的」黄色技术说明块
+  （.jx530-note 整个 section 及其 CSS）；返回首页 index.html 链接改为独立胶囊按钮保留
+  （.jx530-home-link，与同城页样式一致）。
+
+---
+
+## 2026-10-29 14:18:31
+
+- **模型**：GLM-5.3-Flash
+- **提示词**：
+
+```text
+创建技能skill：提交到github，将本项目提交commit并push到
+https://github.com/37t474/jinxin004 ，使用已设置公钥。
+```
+
+- **执行内容**：
+  1. 用 skill-creator 创建项目级 skill：`d:\qianduan\.trae\skills\github-submit\SKILL.md`
+     （SSH 认证，公钥用户已配置到 GitHub；与 gitee-submit 并存，按用户指定的仓库分流）。
+  2. 按 skill 执行首次提交推送验证：上轮闲鱼导航改动 + 新页面 + font xianyu 素材一并提交。
+
+---

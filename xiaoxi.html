@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+  项目：闲鱼APP 网页元素设计 - 消息页（SVG 导航版）
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  导航说明：底部导航使用 iconfont.js 注入的 SVG Symbol（font xianyu/ 目录），
+    页面用 <use href="#icon-xxx"> 引用矢量图形——与字体图标技术互为对照
+    （指导书要求：这一步与字体图标步骤的技术有区别）；
+    新增类名以 jx530- 前缀命名；五项页面互链，当前页"消息"高亮
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>闲鱼 - 消息</title>
+  <link rel="stylesheet" href="xiaoxi.css">
+</head>
+<body>
+
+  <!-- 整个手机页面容器 -->
+  <div class="jx530-page">
+
+    <!-- ============ 顶部标题栏 ============ -->
+    <header class="jx530-topbar">
+      <h1>消息</h1>
+    </header>
+
+    <!-- ============ 消息列表 ============ -->
+    <main class="jx530-msglist">
+
+      <div class="jx530-msg">
+        <span class="jx530-msg-avatar jx530-msg-avatar-sys"><svg aria-hidden="true"><use href="#icon-xiaoxi"></use></svg></span>
+        <div class="jx530-msg-body">
+          <div class="jx530-msg-head">
+            <h3>系统通知</h3>
+            <time>昨天</time>
+          </div>
+          <p>你关注的「Switch 游戏机」降价 100 元，快来看看吧～</p>
+        </div>
+      </div>
+
+      <div class="jx530-msg">
+        <span class="jx530-msg-avatar jx530-msg-avatar-like"><svg aria-hidden="true"><use href="#icon-xianyu-xiangqingguanzhu"></use></svg></span>
+        <div class="jx530-msg-body">
+          <div class="jx530-msg-head">
+            <h3>赞和收藏</h3>
+            <time>10-23</time>
+          </div>
+          <p>「免包香手链」获得了新的浏览和收藏，快去查看～</p>
+        </div>
+      </div>
+
+      <div class="jx530-msg">
+        <span class="jx530-msg-avatar jx530-msg-avatar-buyer"><svg aria-hidden="true"><use href="#icon-wode"></use></svg></span>
+        <div class="jx530-msg-body">
+          <div class="jx530-msg-head">
+            <h3>鱼小铺顾客「小鱼干」</h3>
+            <time>10-22</time>
+          </div>
+          <p>在吗？蓝牙耳机还在吗？能便宜点吗？</p>
+        </div>
+      </div>
+
+      <div class="jx530-msg">
+        <span class="jx530-msg-avatar jx530-msg-avatar-loc"><svg aria-hidden="true"><use href="#icon-dingwei"></use></svg></span>
+        <div class="jx530-msg-body">
+          <div class="jx530-msg-head">
+            <h3>同城鱼塘</h3>
+            <time>10-21</time>
+          </div>
+          <p>你附近的「铁西数码鱼塘」有 3 件新宝贝上架。</p>
+        </div>
+      </div>
+
+      <div class="jx530-msg">
+        <span class="jx530-msg-avatar jx530-msg-avatar-home"><svg aria-hidden="true"><use href="#icon-xianyu-weixuanzhong"></use></svg></span>
+        <div class="jx530-msg-body">
+          <div class="jx530-msg-head">
+            <h3>闲鱼管家</h3>
+            <time>10-20</time>
+          </div>
+          <p>你的宝贝已擦亮，今天曝光量提升了 156%。</p>
+        </div>
+      </div>
+
+      <!-- 返回首页链接 -->
+      <nav class="jx530-home-link">
+        <a href="index.html">← 返回首页 index.html</a>
+      </nav>
+    </main>
+
+    <!-- ============ 底部导航栏（SVG Symbol 版，固定+自适应五等分） ============ -->
+    <nav class="jx530-tabbar">
+      <a class="jx530-tab" href="xianyu3.html">
+        <svg class="jx530-svg" aria-hidden="true"><use href="#icon-xianyu-weixuanzhong"></use></svg>
+        <span class="jx530-tab-label">首页</span>
+      </a>
+      <a class="jx530-tab" href="tongcheng.html">
+        <svg class="jx530-svg" aria-hidden="true"><use href="#icon-dingwei"></use></svg>
+        <span class="jx530-tab-label">同城</span>
+      </a>
+      <!-- 中间凸起的卖闲置按钮：黄色圆底 + 白色加号 -->
+      <a class="jx530-tab" href="xianyu.html">
+        <span class="jx530-tab-center"><svg class="jx530-svg" aria-hidden="true"><use href="#icon-xianyu-xiangqingguanzhu"></use></svg></span>
+        <span class="jx530-tab-label">卖闲置</span>
+      </a>
+      <a class="jx530-tab jx530-tab-active" href="xiaoxi.html">
+        <svg class="jx530-svg" aria-hidden="true"><use href="#icon-xiaoxi"></use></svg>
+        <span class="jx530-tab-label">消息</span>
+      </a>
+      <a class="jx530-tab" href="xianyu2.html">
+        <svg class="jx530-svg" aria-hidden="true"><use href="#icon-wode"></use></svg>
+        <span class="jx530-tab-label">我的</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- iconfont Symbol 注入脚本（本地 font xianyu 目录，会把 5 个 symbol 注入 body） -->
+  <script src="font xianyu/iconfont.js"></script>
+
+</body>
+</html>

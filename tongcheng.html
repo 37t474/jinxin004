@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--
+  项目：闲鱼APP 网页元素设计 - 同城页
+  学号：24001010530  姓名：金鑫  班级：计算机24005
+  导航说明：底部导航使用 iconfont 字体图标（font xianyu/ 目录），
+    新增类名以 jx530- 前缀命名；五项页面互链，当前页"同城"高亮
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>闲鱼 - 同城</title>
+  <link rel="stylesheet" href="tongcheng.css">
+  <!-- 闲鱼专属字体图标样式（含 @font-face 字体文件） -->
+  <link rel="stylesheet" href="font xianyu/iconfont.css">
+</head>
+<body>
+
+  <!-- 整个手机页面容器 -->
+  <div class="jx530-page">
+
+    <!-- ============ 顶部标题栏 ============ -->
+    <header class="jx530-topbar">
+      <h1><span class="iconfont icon-dingwei"></span>同城</h1>
+      <span class="jx530-city">沈阳</span>
+    </header>
+
+    <!-- ============ 同城分类 ============ -->
+    <section class="jx530-cats">
+      <a class="jx530-cat" href="javascript:void(0)">
+        <span class="iconfont icon-xianyu-weixuanzhong"></span>鱼塘
+      </a>
+      <a class="jx530-cat" href="javascript:void(0)">
+        <span class="iconfont icon-xianyu-xiangqingguanzhu"></span>跑腿
+      </a>
+      <a class="jx530-cat" href="javascript:void(0)">
+        <span class="iconfont icon-xiaoxi"></span>委托
+      </a>
+      <a class="jx530-cat" href="javascript:void(0)">
+        <span class="iconfont icon-wode"></span>附近
+      </a>
+    </section>
+
+    <!-- ============ 同城好物列表 ============ -->
+    <main class="jx530-goods">
+      <p class="jx530-goods-title">— 附近在卖 —</p>
+
+      <div class="jx530-goods-item">
+        <img src="img/shoumaishangpin1.jpg" alt="二手手机">
+        <div class="jx530-goods-info">
+          <h3>自用 iPhone 13，9成新无拆修</h3>
+          <p class="jx530-goods-dist"><span class="iconfont icon-dingwei"></span>距离 1.2km · 铁西区</p>
+          <p class="jx530-goods-price">¥2899</p>
+        </div>
+      </div>
+
+      <div class="jx530-goods-item">
+        <img src="img/shoumaishangpin2.jpg" alt="蓝牙耳机">
+        <div class="jx530-goods-info">
+          <h3>无线蓝牙耳机， box 破损不影响使用</h3>
+          <p class="jx530-goods-dist"><span class="iconfont icon-dingwei"></span>距离 2.5km · 和平区</p>
+          <p class="jx530-goods-price">¥129</p>
+        </div>
+      </div>
+
+      <div class="jx530-goods-item">
+        <img src="img/shoumaishangpin3.jpg" alt="游戏机">
+        <div class="jx530-goods-info">
+          <h3>Switch 游戏机带两盘卡带，可同城面交</h3>
+          <p class="jx530-goods-dist"><span class="iconfont icon-dingwei"></span>距离 3.8km · 皇姑区</p>
+          <p class="jx530-goods-price">¥1150</p>
+        </div>
+      </div>
+
+      <div class="jx530-goods-item">
+        <img src="img/shoumaishangpin4.jpg" alt="笔记本">
+        <div class="jx530-goods-info">
+          <h3>联想小新笔记本，办公学习流畅</h3>
+          <p class="jx530-goods-dist"><span class="iconfont icon-dingwei"></span>距离 5.1km · 大东区</p>
+          <p class="jx530-goods-price">¥3399</p>
+        </div>
+      </div>
+
+      <!-- 返回首页链接 -->
+      <nav class="jx530-home-link">
+        <a href="index.html">← 返回首页 index.html</a>
+      </nav>
+    </main>
+
+    <!-- ============ 底部导航栏（iconfont 字体图标版，固定+自适应五等分） ============ -->
+    <nav class="jx530-tabbar">
+      <a class="jx530-tab" href="xianyu3.html">
+        <span class="iconfont icon-xianyu-weixuanzhong"></span>
+        <span class="jx530-tab-label">首页</span>
+      </a>
+      <a class="jx530-tab jx530-tab-active" href="tongcheng.html">
+        <span class="iconfont icon-dingwei"></span>
+        <span class="jx530-tab-label">同城</span>
+      </a>
+      <!-- 中间凸起的卖闲置按钮：黄色圆底 + 白色加号 -->
+      <a class="jx530-tab" href="xianyu.html">
+        <span class="jx530-tab-center"><span class="iconfont icon-xianyu-xiangqingguanzhu"></span></span>
+        <span class="jx530-tab-label">卖闲置</span>
+      </a>
+      <a class="jx530-tab" href="xiaoxi.html">
+        <span class="iconfont icon-xiaoxi"></span>
+        <span class="jx530-tab-label">消息</span>
+      </a>
+      <a class="jx530-tab" href="xianyu2.html">
+        <span class="iconfont icon-wode"></span>
+        <span class="jx530-tab-label">我的</span>
+      </a>
+    </nav>
+
+  </div>
+
+</body>
+</html>

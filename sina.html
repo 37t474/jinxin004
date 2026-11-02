@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--
+  功能名称：新浪排行榜选项卡页（一比一仿照截图 sina.png）
+  功能简介：仿新浪新闻排行榜：左上"排行榜"标题，右上"新闻/证券/理财/博客"选项卡，
+            复用 js/jx530_tabs.js 组件实现点击切换榜单，新闻榜默认选中
+  作者：金鑫
+  建立时间：2026-11-02
+  使用模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>排行榜 - 新浪风格选项卡</title>
+  <style>
+    /* 全局重置 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    /* ============ 排行榜卡片 ============ */
+    .jx530_card {
+      width: 578px;
+      margin: 30px auto;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding-bottom: 8px;
+    }
+
+    /* 头部：左标题 + 右选项卡，底线贯穿整个卡片 */
+    .jx530_head {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .jx530_title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #1e50a2;
+      line-height: 37px;          /* 与选项卡等高，文字垂直居中 */
+      padding-left: 20px;
+    }
+
+    /* ============ 选项卡条 ============ */
+    .jx530_tabbar {
+      display: flex;
+    }
+
+    .jx530_tab-btn {
+      width: 57px;
+      padding: 8px 0;
+      border: none;
+      border-left: 1px solid #ddd;   /* 选项卡之间的竖分隔线 */
+      border-top: 2px solid transparent;
+      background-color: #f8f8f8;
+      font-size: 14px;
+      color: #1e50a2;
+      cursor: pointer;
+    }
+
+    /* 选中态：白底盖住底部横线 + 顶部蓝色压边 + 加粗 */
+    .jx530_active {
+      background-color: #fff;
+      color: #1e50a2;
+      font-weight: bold;
+      border-top-color: #1e50a2;
+      border-bottom: 1px solid #fff;   /* 与卡片同色，盖住 head 底线 */
+      margin-bottom: -1px;             /* 向下延伸 1px 盖线 */
+    }
+
+    /* ============ 榜单列表 ============ */
+    .jx530_tab-panel {
+      display: none;                   /* 面板默认全部隐藏 */
+      padding: 6px 20px 4px;
+    }
+
+    .jx530_show {
+      display: block;                  /* 当前显示的面板 */
+    }
+
+    .jx530_tab-panel li {
+      list-style: none;
+      line-height: 31px;
+      font-size: 14px;
+      color: #333;
+      white-space: nowrap;             /* 单行显示 */
+      overflow: hidden;                /* 超出隐藏 */
+      text-overflow: ellipsis;         /* 省略号收尾（仿截图截断效果） */
+    }
+
+    /* 序号方块：默认灰底蓝字 */
+    .jx530_no {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+      margin-right: 8px;
+      border-radius: 2px;
+      text-align: center;
+      font-size: 12px;
+      font-style: normal;
+      vertical-align: 2px;
+      background-color: #f2f3f5;
+      color: #5a7bc0;
+    }
+
+    /* 前三名：红底白字 */
+    .jx530_no-top {
+      background-color: #e0342b;
+      color: #fff;
+    }
+
+    /* 返回首页链接 */
+    .jx530_home-link {
+      text-align: center;
+      padding: 12px 0 4px;
+    }
+
+    .jx530_home-link a {
+      font-size: 12px;
+      color: #666;
+      text-decoration: none;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 5px 16px;
+    }
+
+    .jx530_home-link a:hover {
+      color: #1e50a2;
+      border-color: #1e50a2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="jx530_card">
+    <!-- 头部：标题 + 选项卡（新闻预置选中类，为默认选项） -->
+    <div class="jx530_head">
+      <h1 class="jx530_title">排行榜</h1>
+      <div class="jx530_tabbar">
+        <button type="button" class="jx530_tab-btn jx530_active">新闻</button>
+        <button type="button" class="jx530_tab-btn">证券</button>
+        <button type="button" class="jx530_tab-btn">理财</button>
+        <button type="button" class="jx530_tab-btn">博客</button>
+      </div>
+    </div>
+
+    <!-- 新闻榜（与截图一致，1-10 条；1-3 序号红底） -->
+    <ul class="jx530_tab-panel jx530_show">
+      <li><i class="jx530_no jx530_no-top">1</i>构建“股市+债市”稳市机制！央行新工具来了</li>
+      <li><i class="jx530_no jx530_no-top">2</i>美媒：美军已准备好再打击伊朗 特朗普或中期选举后</li>
+      <li><i class="jx530_no jx530_no-top">3</i>姆巴佩发表涉中国不当言论，多家品牌终止合作，媒</li>
+      <li><i class="jx530_no">4</i>东鹏饮料集团：零容忍伤害民族感情行为，终止与姆</li>
+      <li><i class="jx530_no">5</i>300672，业绩暴涨超5600%！10股业绩大增（附股）</li>
+      <li><i class="jx530_no">6</i>史上最大IPO要来了！7位创始人身均超130亿美元</li>
+      <li><i class="jx530_no">7</i>外交部：对英国警方任意、过度执法行为表示强烈不</li>
+      <li><i class="jx530_no">8</i>1000000美元！特朗普重金悬赏</li>
+      <li><i class="jx530_no">9</i>张一鸣以6700亿元刷新中国首富财富纪录！《2026胡</li>
+      <li><i class="jx530_no">10</i>Gucci卖不动了 开云今年将关掉至少125家门店</li>
+    </ul>
+
+    <!-- 证券榜 -->
+    <ul class="jx530_tab-panel">
+      <li><i class="jx530_no jx530_no-top">1</i>沪指收涨1.2%重回3500点，两市成交额放大</li>
+      <li><i class="jx530_no jx530_no-top">2</i>券商板块午后拉升，龙头股全线飘红</li>
+      <li><i class="jx530_no jx530_no-top">3</i>北向资金今日净买入超80亿元</li>
+      <li><i class="jx530_no">4</i>半导体设备股走强，多股涨停</li>
+      <li><i class="jx530_no">5</i>白酒股集体回调，板块指数跌逾2%</li>
+      <li><i class="jx530_no">6</i>新股申购提醒：下周三只新股首发上市</li>
+    </ul>
+
+    <!-- 理财榜 -->
+    <ul class="jx530_tab-panel">
+      <li><i class="jx530_no jx530_no-top">1</i>多家银行下调存款利率，理财替代受关注</li>
+      <li><i class="jx530_no jx530_no-top">2</i>货币基金收益率跌破1.5%，钱该放哪？</li>
+      <li><i class="jx530_no jx530_no-top">3</i>黄金积存业务升温，年轻投资者进场</li>
+      <li><i class="jx530_no">4</i>国债逆回购月末翘尾，年化利率冲高</li>
+      <li><i class="jx530_no">5</i>养老理财试点扩容，产品收益如何？</li>
+      <li><i class="jx530_no">6</i>指数基金定投攻略：新手入门三步走</li>
+    </ul>
+
+    <!-- 博客榜 -->
+    <ul class="jx530_tab-panel">
+      <li><i class="jx530_no jx530_no-top">1</i>博主实测：一线城市通勤成本大比拼</li>
+      <li><i class="jx530_no jx530_no-top">2</i>从0到1搭建个人博客的完整路线图</li>
+      <li><i class="jx530_no jx530_no-top">3</i>十年程序员聊转行：那些没人告诉你的事</li>
+      <li><i class="jx530_no">4</i>周末去哪儿？小众露营地推荐合集</li>
+      <li><i class="jx530_no">5</i>写给新生的大学四年规划建议</li>
+      <li><i class="jx530_no">6</i>家庭理财避坑指南：这几类产品要谨慎</li>
+    </ul>
+
+    <!-- 返回首页链接 -->
+    <nav class="jx530_home-link">
+      <a href="index.html">← 返回首页 index.html</a>
+    </nav>
+  </div>
+
+  <!-- 复用 js 文件夹中的可复用选项卡组件（事件监听 + 先清空全部选中再设置当前） -->
+  <script src="js/jx530_tabs.js"></script>
+  <script>
+    /*
+      作者：金鑫
+      建立时间：2026-11-02
+      使用模型：GLM-5.3-Flash
+    */
+
+    // 功能名称：jx530_pageInit —— 页面初始化
+    // 简介：DOM 加载完成后，把新浪排行榜的四个选项卡交给可复用组件 jx530_initTabs 管理；
+    //       默认选中已在 HTML 中预置（新闻 tab 带 jx530_active、面板带 jx530_show）
+    document.addEventListener("DOMContentLoaded", function () {
+      jx530_initTabs(".jx530_tab-btn", ".jx530_tab-panel", "jx530_active", "jx530_show");
+    });
+  </script>
+
+</body>
+</html>

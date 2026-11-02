@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!--
+  功能名称：新闻选项卡页（Tab 选项卡演示）
+  功能简介：用可复用的外部 JS 实现四个新闻选项卡切换（国内/省内/国际/最热），国内新闻默认选中
+  作者：金鑫
+  建立时间：2026-11-02
+  使用模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新闻选项卡 - Tab 切换</title>
+  <style>
+    /* 全局重置 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    /* 页面容器 */
+    .jx530_box {
+      max-width: 480px;
+      margin: 30px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    /* 选项卡按钮条 */
+    .jx530_tabbar {
+      display: flex;
+      border-bottom: 1px solid #eee;
+    }
+
+    .jx530_tab-btn {
+      flex: 1;
+      padding: 13px 0;
+      border: none;
+      background-color: #f7f7f7;
+      font-size: 14px;
+      color: #666;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    /* 选中态：白底 + 黄色压线 + 加粗 */
+    .jx530_active {
+      background-color: #fff;
+      color: #333;
+      font-weight: bold;
+      border-bottom-color: #ffd21e;
+    }
+
+    /* 内容面板：默认全部隐藏 */
+    .jx530_tab-panel {
+      display: none;
+      padding: 16px 18px 20px;
+    }
+
+    /* 当前显示的面板 */
+    .jx530_show {
+      display: block;
+    }
+
+    /* 新闻列表 */
+    .jx530_tab-panel li {
+      list-style: none;
+      padding: 10px 0;
+      border-bottom: 1px dashed #eee;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .jx530_tab-panel li:last-child {
+      border-bottom: none;
+    }
+
+    .jx530_tab-panel li span {
+      float: right;
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* 返回首页链接 */
+    .jx530_home-link {
+      text-align: center;
+      padding: 14px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .jx530_home-link a {
+      font-size: 12px;
+      color: #666;
+      text-decoration: none;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 6px 16px;
+    }
+
+    .jx530_home-link a:hover {
+      color: #ffd21e;
+      border-color: #ffd21e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="jx530_box">
+    <!-- 选项卡按钮条：国内新闻预置选中类 jx530_active（默认选项） -->
+    <div class="jx530_tabbar">
+      <button type="button" class="jx530_tab-btn jx530_active">国内新闻</button>
+      <button type="button" class="jx530_tab-btn">省内新闻</button>
+      <button type="button" class="jx530_tab-btn">国际新闻</button>
+      <button type="button" class="jx530_tab-btn">最热新闻</button>
+    </div>
+
+    <!-- 与按钮一一对应的四个内容面板：国内新闻面板预置显示类 jx530_show -->
+    <ul class="jx530_tab-panel jx530_show">
+      <li>全国秋粮收购全面展开，市场供应充足<span>10-30</span></li>
+      <li>多条高铁新线开通运营，出行更便捷<span>10-29</span></li>
+      <li>全国多地上线"一次办妥"政务服务<span>10-28</span></li>
+      <li>国家统计局发布前三季度经济数据<span>10-27</span></li>
+    </ul>
+
+    <ul class="jx530_tab-panel">
+      <li>沈阳地铁新线路建设进入冲刺阶段<span>10-30</span></li>
+      <li>辽宁出台措施支持中小企业数字化转型<span>10-29</span></li>
+      <li>大连港秋冬航次计划发布<span>10-28</span></li>
+      <li>全省文旅消费季活动正式启动<span>10-27</span></li>
+    </ul>
+
+    <ul class="jx530_tab-panel">
+      <li>多国代表呼吁加强气候领域合作<span>10-30</span></li>
+      <li>国际航运价格指数小幅回落<span>10-29</span></li>
+      <li>全球新能源装机量再创新高<span>10-28</span></li>
+      <li>国际体坛新赛季赛程公布<span>10-27</span></li>
+    </ul>
+
+    <ul class="jx530_tab-panel">
+      <li>第七届进博会准备就绪，参展商数量创新高<span>10-30</span></li>
+      <li>神舟系列载人飞行任务新进展<span>10-29</span></li>
+      <li>国产大飞机C919新增两条航线<span>10-28</span></li>
+      <li>数字人民币应用场景持续拓展<span>10-27</span></li>
+    </ul>
+
+    <!-- 返回首页链接 -->
+    <nav class="jx530_home-link">
+      <a href="index.html">← 返回首页 index.html</a>
+    </nav>
+  </div>
+
+  <!-- 外部引用 js 文件夹中的可复用选项卡组件 -->
+  <script src="js/jx530_tabs.js"></script>
+  <script>
+    /*
+      作者：金鑫
+      建立时间：2026-11-02
+      使用模型：GLM-5.3-Flash
+    */
+
+    // 功能名称：jx530_pageInit —— 页面初始化
+    // 简介：DOM 加载完成后，把本页新闻选项卡交给可复用组件 jx530_initTabs 管理；
+    //       默认选中已在 HTML 中预置（国内新闻带 jx530_active、面板带 jx530_show）
+    document.addEventListener("DOMContentLoaded", function () {
+      jx530_initTabs(".jx530_tab-btn", ".jx530_tab-panel", "jx530_active", "jx530_show");
+    });
+  </script>
+
+</body>
+</html>

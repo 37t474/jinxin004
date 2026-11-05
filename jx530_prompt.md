@@ -249,20 +249,60 @@ AGENTS.md 所有说明、检查条目统一简体中文；文件路径、HTML、
 
 ---
 
-## 2026-11-02 14:45:26
+## 2026-11-05 14:21:04
 
 - **模型**：GLM-5.3-Flash
 - **提示词**：
 
 ```text
-帮我提交到github中，我要发布之后点击网址可以直接看见效果
+帮我完成 // ── 任务 2：初始化 #wySw2，循环 + 600ms + 圆点可点 + 箭头切换 ──
+（上下文：swiper-task.html 课堂任务页）
 ```
 
 - **执行内容**：
-  1. 检查 git 状态：全部代码已在提交 68a6654 并推送至 GitHub（本地与远程 master 同步）。
-  2. GitHub Pages 已开启，实测全部 200：
-     首页 https://37t474.github.io/jinxin004/、sina.html、tabs.html、js/jx530_tabs.js 均可直达。
-  3. 本条记录随仓库同步提交。
+  1. 检查发现任务 2 代码已存在于 swiper-task.html（loop/speed:600/pagination
+     clickable/navigation 四项齐备），无需重写。
+  2. 浏览器实测四项全部通过：圆点+箭头渲染、next 翻页与 prev 循环回卷、
+     圆点点击跳转、控制台无报错。
+  3. 附带说明：任务 3、4 及任务 4 进阶的 TODO 尚未完成。
+
+---
+
+## 2026-11-05 14:29:52
+
+- **模型**：GLM-5.3-Flash
+- **提示词**：
+
+```text
+帮我完成swiper-task.html中的任务4完成，像
+https://spontaneous-valkyrie-4e4229.netlify.app/swiper-lesson 里的5切换效果一样
+```
+
+- **执行内容**：
+  1. WebFetch 教师讲解版第 5 节，取得 wySw4 官方配置：loop + effect + speed:800 +
+     autoplay 3200ms(disableOnInteraction:false) + pagination clickable。
+  2. 补全任务 4 基础初始化（配置与教师版一致，effect 初始 slide）。
+  3. 补全任务 4 进阶三个 TODO：按钮高亮切换（先清全部 wy-on 再设当前）、
+     wySw4.destroy(true,true) 销毁、按 btn.dataset.fx 重建实例。
+  4. 浏览器实测：自动播放、按钮切换效果（cube/fade）、高亮、控制台无报错。
+
+---
+
+## 2026-11-05 14:52:30
+
+- **模型**：GLM-5.3-Flash
+- **提示词**：
+
+```text
+这个任务帮我提交到github，并且给提示词留有访问入口
+（上下文：Swiper 任务三提交物 = 能运行的页面 + 与 AI 的关键对话记录）
+```
+
+- **执行内容**：
+  1. index.html 课堂目录新增「Swiper 任务 · AI 提示词记录」入口（链
+     swiper-ai-record.md）。
+  2. swiper-task.html 底部返回区新增「📋 AI 提示词记录」链接。
+  3. 调用 github-submit skill：commit 并 push 到 GitHub jinxin004。
 
 ---
 

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+  功能名称：AI 提示词记录总页（Swiper 三关任务）
+  功能简介：汇总三关任务与 AI 的关键对话记录——任务一两轮提示词迭代、
+            任务二 creative 仿写问答、任务三超纲能力实现与答辩四问自答；
+            顶部锚点导航，从 index.html 跳转进入
+  作者：金鑫　学号：24001010530
+  建立时间：2026-11-09
+  使用模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 提示词记录 · Swiper 三关任务 | 金鑫 24001010530</title>
+  <style>
+    body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#f6f8fc;color:#1f2937;max-width:920px;margin:0 auto;padding:34px 20px 60px}
+
+    /* ── 页头 ── */
+    .jx530-head{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);border-radius:20px;padding:36px 38px;color:#fff;margin-bottom:14px;box-shadow:0 12px 30px rgba(15,43,91,.3)}
+    .jx530-head .jx530-badge{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+    .jx530-head h1{margin:0;font-size:27px}
+    .jx530-head h1 b{color:#ffd166}
+    .jx530-head p{margin-top:12px;font-size:14.5px;color:#d9e3f5;line-height:2}
+
+    /* ── 锚点导航 ── */
+    .jx530-nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+    .jx530-nav a{font-size:13.5px;color:#0f2b5b;background:#fff;border:1px solid #c7d8f8;text-decoration:none;padding:9px 18px;border-radius:999px;transition:all .2s}
+    .jx530-nav a:hover{background:#0f2b5b;color:#fff}
+
+    /* ── 白卡片章节 ── */
+    .jx530-sec{background:#fff;border-radius:18px;padding:28px 30px;margin-bottom:26px;border:1px solid #e8ecf5;box-shadow:0 4px 14px rgba(31,41,55,.06);position:relative;overflow:hidden}
+    .jx530-sec::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(#0f2b5b,#1d5bbf)}
+    .jx530-sec-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+    .jx530-sec-head .jx530-no{flex:none;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;font-size:17px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+    .jx530-sec-head h2{margin:0;font-size:20px;color:#111827}
+    .jx530-sec-head small{display:block;font-weight:normal;color:#9ca3af;font-size:13px;margin-top:3px}
+    .jx530-sec p.jx530-txt{font-size:14.5px;color:#374151;line-height:2;margin:0 0 10px}
+    .jx530-sec p.jx530-txt b{color:#0f2b5b}
+    .jx530-sec code{background:#eef2ff;color:#1d4ed8;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+
+    /* ── 对话气泡 ── */
+    .jx530-round{border:1px solid #eef1f8;border-radius:14px;padding:16px 18px;margin:16px 0}
+    .jx530-round h3{margin:0 0 12px;font-size:15px;color:#0f2b5b}
+    .jx530-round h3 span{font-size:12px;color:#9ca3af;font-weight:normal;margin-left:8px}
+    .jx530-bubble{max-width:88%;border-radius:14px;padding:12px 16px;font-size:13.5px;line-height:1.9;margin-bottom:12px;white-space:pre-wrap}
+    .jx530-bubble-user{margin-left:auto;background:#1d5bbf;color:#fff;border-bottom-right-radius:4px}
+    .jx530-bubble-ai{background:#f3f5fa;color:#1f2937;border-bottom-left-radius:4px}
+    .jx530-bubble-ai b{color:#0f2b5b}
+    .jx530-bubble pre{margin:8px 0 0;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px 16px;overflow:auto;font-family:Consolas,monospace;font-size:12.8px;line-height:1.8;white-space:pre}
+    .jx530-bubble pre em{color:#7dd3fc;font-style:normal}
+
+    /* ── 验证结论框 ── */
+    .jx530-verify{border-radius:12px;padding:12px 16px;font-size:13.5px;line-height:2;margin-top:4px}
+    .jx530-verify b{display:block;margin-bottom:2px;font-size:13px}
+    .jx530-verify-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+    .jx530-verify-ok b{color:#15803d}
+
+    /* ── 答辩问答 ── */
+    .jx530-qa{border-left:3px solid #e8890c;background:#fff7ed;border-radius:0 12px 12px 0;padding:12px 18px;margin:12px 0;font-size:13.8px;line-height:2;color:#7c2d12}
+    .jx530-qa b{color:#c2410c}
+
+    .jx530-home{display:block;text-align:center;margin-top:34px}
+    .jx530-home a{display:inline-block;padding:11px 34px;border-radius:999px;background:#0f2b5b;color:#fff;text-decoration:none;font-size:14px;letter-spacing:1px;transition:background .2s}
+    .jx530-home a:hover{background:#1d5bbf}
+  </style>
+</head>
+<body>
+
+  <!-- ── 页头 ── -->
+  <header class="jx530-head">
+    <span class="jx530-badge">SWIPER 三关任务 · AI 协作留痕</span>
+    <h1><b>AI 提示词记录</b> · 关键对话一览</h1>
+    <p>按课堂规则"禁止复制即交"：每个任务保留提示词记录，答辩时能讲清 AI 给的每一段代码。<br>作者：金鑫 · 学号 24001010530 · 使用模型 GLM-5.3-Flash · 完整留痕见项目 <code style="background:rgba(255,255,255,.16);color:#ffd166;padding:1px 7px;border-radius:5px">jx530_prompt.md</code></p>
+  </header>
+
+  <nav class="jx530-nav">
+    <a href="#jx530-t1">任务一 · 提示词工程师 ⭐⭐</a>
+    <a href="#jx530-t2">任务二 · creative 仿写 ⭐⭐⭐</a>
+    <a href="#jx530-t3">任务三 · 综合创作 ⭐⭐⭐</a>
+  </nav>
+
+  <!-- ── 任务一 ── -->
+  <section class="jx530-sec" id="jx530-t1">
+    <div class="jx530-sec-head">
+      <div class="jx530-no">T1</div>
+      <h2>任务一 · 提示词工程师<small>两轮迭代：需求漏了 → 参数语言补全</small></h2>
+    </div>
+    <p class="jx530-txt">目标配置四项需求：<b>无缝循环 / 3.2s 自动翻且拖动不停 / 圆点可点 / 初始 cube</b>。</p>
+
+    <div class="jx530-round">
+      <h3>第 1 轮<span>最直觉的问法</span></h3>
+      <div class="jx530-bubble jx530-bubble-user">帮我写一个 Swiper 轮播配置：无缝循环，3.2 秒自动翻页，底部圆点分页器可以点击跳转。</div>
+      <div class="jx530-bubble jx530-bubble-ai"><b>AI 回答：</b><pre>new Swiper('#wySw4', {
+  loop: true,
+  autoplay: { delay: 3200 },
+  pagination: { el: '#wyPag4', clickable: true },
+});</pre></div>
+      <div class="jx530-verify jx530-verify-ok" style="background:#fef2f2;border-color:#fecaca;color:#991b1b"><b style="color:#b91c1c">验证结论</b>拖动后自动播放停止、效果仍是 slide——漏了「手动操作后不停止」和「初始 cube」两项。</div>
+    </div>
+
+    <div class="jx530-round">
+      <h3>第 2 轮<span>参数语言定向补全</span></h3>
+      <div class="jx530-bubble jx530-bubble-user">上一版有两个问题：1) 拖动后自动播放要继续，请加上 disableOnInteraction: false；2) 初始切换效果要求是 3D 立方体，把 effect 设为 cube。重新给完整配置，动画时长 800 毫秒。</div>
+      <div class="jx530-bubble jx530-bubble-ai"><b>AI 回答（最终采纳）：</b><pre>new Swiper('#wySw4', {
+  <em>loop: true</em>,                                  // ① 无缝循环
+  <em>effect: 'cube'</em>,                              // ④ 初始效果为 cube
+  speed: 800,
+  <em>autoplay: { delay: 3200, disableOnInteraction: false }</em>,  // ②
+  <em>pagination: { el: '#wyPag4', clickable: true }</em>,          // ③
+});</pre></div>
+      <div class="jx530-verify jx530-verify-ok"><b>验证结论</b>四项全部通过（页面 swiper-task1.html 底部有真实运行演示），控制台无报错。✅</div>
+    </div>
+
+    <div class="jx530-qa"><b>答辩抽问自答：</b>第一版漏了「拖动不停止」和「cube」；第二轮改用参数名精确表达（disableOnInteraction: false、effect: 'cube'）并指出上版错处让 AI 定向修改；AI 第一次的代码是"不全"而非"错"——autoplay 缺 disableOnInteraction: false（默认 true 拖一次就停），且没写 effect。</div>
+  </section>
+
+  <!-- ── 任务二 ── -->
+  <section class="jx530-sec" id="jx530-t2">
+    <div class="jx530-sec-head">
+      <div class="jx530-no">T2</div>
+      <h2>任务二 · creative 仿写<small>课堂没讲，AI + 官方示例教会我</small></h2>
+    </div>
+    <p class="jx530-txt">参考官方示例 <code>swiper/demo/257-effect-creative.html</code>，为演示四新增第 7 个按钮「creative 电影墙」。要求：上一张缩小左移并带角度、下一张放大右移进场，像电影选片墙。</p>
+
+    <div class="jx530-round">
+      <h3>与 AI 的关键往返<span>creativeEffect 写法</span></h3>
+      <div class="jx530-bubble jx530-bubble-user">Swiper 的 creativeEffect 里 prev 和 next 分别怎么写？我要"旧片缩小左移带角度、新片放大右移进场"，translate 用像素还是百分比？</div>
+      <div class="jx530-bubble jx530-bubble-ai"><b>AI 回答（要点）：</b>prev/next 各自是一组变换，支持 translate / rotate / scale / opacity / shadow；translate 建议用<b>百分比字符串</b>（相对 slide 自身宽高，不同屏宽观感一致），数字则按像素。最终采纳：</div>
+      <div class="jx530-bubble jx530-bubble-ai"><pre>creativeEffect: {
+  <em>prev</em>: { shadow: true, translate: ["-40%", "-20%", -250],
+          rotate: [0, 0, -10], scale: 0.7, opacity: 0 },
+  <em>next</em>: { shadow: true, translate: ["110%", "20%", 0],
+          rotate: [0, 0, 6], scale: 1.2, opacity: 0 },
+}</pre></div>
+      <div class="jx530-verify jx530-verify-ok"><b>验证结论</b>点击「creative 电影墙」按钮后高亮切换、效果重建成功，slides 呈现 rotate/scale 3D 变换，控制台无报错。✅</div>
+    </div>
+
+    <div class="jx530-qa"><b>追问自答（prev / next 的 transform 各控制什么）：</b>prev 控制当前这张被翻走之后去哪——左上退、Z 轴后退、带角度缩小淡出，像把旧海报贴回墙上；next 控制下一张从哪来——从右侧 110% 放大带角度进场，像新海报递到眼前。transform 百分号相对 slide 自身宽高（不是容器），X 轴 100% = 一张卡片宽。</div>
+    <div class="jx530-qa"><b>答辩抽问（改 20 度）：</b>把 prev.rotate 的 Z 轴分量从 -10 改成 -20（或 next 的 6 改成 20），单位是度，正负控制倾斜方向。</div>
+  </section>
+
+  <!-- ── 任务三 ── -->
+  <section class="jx530-sec" id="jx530-t3">
+    <div class="jx530-sec-head">
+      <div class="jx530-no">T3</div>
+      <h2>任务三 · 综合创作<small>第六件展品 + 超纲能力 keyboard</small></h2>
+    </div>
+    <p class="jx530-txt">① 用 AI 生成<b>爱达·魔都号</b>横版 16:9 邮轮图（<code>swiper-imgs/aidahao_1.jpg</code>），四个轮播各加第 6 张 slide，结构完整（img + 标题 + 描述）；② 超纲能力选 <code>keyboard</code> 键盘控制。</p>
+
+    <div class="jx530-round">
+      <h3>与 AI 的关键往返<span>keyboard 参数与坑</span></h3>
+      <div class="jx530-bubble jx530-bubble-user">想给 #wySw4 加键盘方向键控制，但页面很长，希望只有轮播在可视区时按键才生效，怎么配？</div>
+      <div class="jx530-bubble jx530-bubble-ai"><b>AI 第一次回答：</b>加 <pre>keyboard: true</pre></div>
+      <div class="jx530-bubble jx530-bubble-ai"><b>追问：</b>测试发现页面在别处按方向键也会切轮播、和页面滚动打架。<b>AI 修正：</b>写成对象并加 onlyInViewport：</div>
+      <div class="jx530-bubble jx530-bubble-ai"><pre>keyboard: { <em>enabled: true</em>, <em>onlyInViewport: true</em> }</pre></div>
+      <div class="jx530-verify jx530-verify-ok"><b>验证结论</b>滚动到第 4 个轮播按 ArrowRight 翻页生效；轮播不在视口时按键不误触发；爱达·魔都号第 6 张在四个轮播正常显示，图片 200，控制台无报错。✅</div>
+    </div>
+
+    <div class="jx530-qa"><b>答辩四问 ① 这段代码什么意思？</b>keyboard 模块监听 document 的方向键；enabled 开启功能；onlyInViewport: true 限定只有轮播容器在可视区内才响应，避免长页面滚动时误触发。</div>
+    <div class="jx530-qa"><b>答辩四问 ② AI 第一次给的哪里不对、你改了什么？</b>AI 给的 keyboard: true 是全局生效——页面任何位置按方向键都会切轮播。我把简写改成对象写法，补 onlyInViewport: true 限定视口。</div>
+    <div class="jx530-qa"><b>答辩四问 ③ 新参数的作用？</b>onlyInViewport 让键盘监听"看位置"：轮播滚出视口就忽略按键，滚回来才恢复，这是简写形式给不了的精细控制。</div>
+    <div class="jx530-qa"><b>答辩四问 ④ 现场把 delay 改成指定值？</b>把 autoplay.delay 从 3200 改成 1600：自动翻页间隔缩短一半，动画时长 speed: 800 不变，观感更急促；因为配置抽成了共用函数 jx530_sw4Config(fx)，改一处，初始和所有效果重建后都生效。</div>
+  </section>
+
+  <div class="jx530-home"><a href="index.html">← 返回课程首页 index.html</a></div>
+</body>
+</html>

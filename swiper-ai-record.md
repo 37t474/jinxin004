@@ -96,3 +96,38 @@ creativeEffect: {
 
 把 `prev.rotate` 的 Z 轴分量从 `-10` 改成 `-20`（或 next 的 `6` 改成 `20`）即可，
 单位是度，正负控制倾斜方向。
+
+---
+
+## 任务三 · 综合创作 + 技术答辩 ⭐⭐⭐
+
+实现：① 第六件展品「爱达·魔都号」（AI 生成 16:9 邮轮图，四个轮播各加一张完整 slide）；
+② 超纲能力选了 **keyboard 键盘控制**（`keyboard: { enabled: true, onlyInViewport: true }`，
+初始与重建共用配置函数 `jx530_sw4Config(fx)`，切效果不丢）。
+
+### 答辩四问自答
+
+1. **这段代码什么意思？**（可能被现场指定的几处）
+   - `autoplay: { delay: 3200, disableOnInteraction: false }`：每 3.2 秒自动翻一张；
+     `disableOnInteraction: false` 表示我手动拖过之后自动播放**不停止**（默认 true 会停）。
+   - `wySw4.destroy(true, true)`：销毁旧实例。第一个 true 删实例、第二个 true 清掉
+     slide 上的内联样式和 loop 克隆——因为 effect 创建后不能热改，必须销毁重建。
+   - `jx530_sw4Config(fx)`：配置工厂函数，初始化和重建共用同一份配置，只随参数换
+     effect；fx 是 creative 时才附加"电影墙"creativeEffect。
+   - `keyboard: { enabled: true, onlyInViewport: true }`：方向键翻页；onlyInViewport
+     保证轮播滚出屏幕后按方向键不会误触发它，也不干扰页面滚动。
+
+2. **AI 第一次给的哪里不对、你改了什么？**
+   第一次生成的 creativeEffect 只写了 translate（平移），没写 scale 和 opacity：
+   旧片新片一样大、一直不透明，叠在一起完全没有"电影墙"层次。我让 AI 补上
+   `scale`（prev 缩到 0.7、next 放大到 1.2）和 `opacity: 0`（起止渐隐），效果才对。
+
+3. **新加的能力（keyboard）的作用？**
+   让轮播支持键盘 ←/→ 方向键翻页，方便演示和无鼠标操作；`onlyInViewport: true`
+   限定轮播在可视区域内才响应，不影响页面正常滚动。切效果销毁重建后依然有效，
+   因为 keyboard 写在共用的 `jx530_sw4Config` 里。
+
+4. **现场把 delay 改成什么值并解释预览变化？**
+   把 `delay: 3200` 改成 `800`：自动播放间隔从 3.2 秒缩到 0.8 秒，预览里翻页
+   速度肉眼可见地快了约 4 倍。delay 单位是毫秒，表示两张之间停多久；改完刷新
+   （或重建实例）即可看到变化。

@@ -124,6 +124,7 @@
             <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>2023 年商业首航 · 国产干线客机翱翔蓝天</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>10909 米 · 触碰地球第四极马里亚纳海沟</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>500 米口径 · 世界最大单口径射电望远镜</p></div></div>
+            <!-- 任务三①：第六件展品爱达·魔都号，图片 AI 生成（16:9），四个轮播都加了这张 -->
             <div class="swiper-slide"><img src="swiper-imgs/aidahao_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>首艘国产大型邮轮 · 2024 年 1 月首航</p></div></div>
           </div>
         </div>
@@ -213,6 +214,7 @@
       <button data-fx="coverflow">coverflow 画廊堆叠（沉浸）</button>
       <button data-fx="flip">flip 翻页（复古）</button>
       <button data-fx="cards">cards 卡片（俏皮）</button>
+      <!-- 任务二：新增的第 7 个按钮，data-fx 会被读到 btn.dataset.fx 作为 effect 名 -->
       <button data-fx="creative">creative 电影墙（自定义变换）</button>
     </div>
     <div class="wy-demo">
@@ -293,12 +295,12 @@ var wySw2 = new Swiper("#wySw2", {
       speed: 800,
       autoplay: { delay: 3200, disableOnInteraction: false },
       pagination: { el: "#wyPag4", clickable: true },
-      keyboard: { enabled: true, onlyInViewport: true },
+      keyboard: { enabled: true, onlyInViewport: true },  // 任务三②：方向键翻页，轮播滚出视口就不响应
     };
-    if (fx === "creative") {
+    if (fx === "creative") {              // 任务二：第 7 种效果"电影选片墙"
       conf.creativeEffect = {
-        prev: { shadow: true, translate: ["-40%", "-20%", -250], rotate: [0, 0, -10], scale: 0.7, opacity: 0 },
-        next: { shadow: true, translate: ["110%", "20%", 0], rotate: [0, 0, 6], scale: 1.2, opacity: 0 },
+        prev: { shadow: true, translate: ["-40%", "-20%", -250], rotate: [0, 0, -10], scale: 0.7, opacity: 0 },  // prev＝旧片去哪：左上退、Z 轴后退、带 -10° 角缩小淡出
+        next: { shadow: true, translate: ["110%", "20%", 0], rotate: [0, 0, 6], scale: 1.2, opacity: 0 },  // next＝新片从哪来：右侧 110% 放大 1.2 倍带 6° 角进场
       };
     }
     return conf;

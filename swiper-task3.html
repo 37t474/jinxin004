@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!--
+  功能名称：Swiper 任务三 · 综合创作（内容展示页）
+  功能简介：展示任务三"第六件展品爱达·魔都号 + 超纲能力 keyboard 键盘控制"的实现过程、
+            AI 对话记录与答辩四问自答，并内嵌 keyboard 控制的真实运行轮播
+  作者：金鑫　学号：24001010530
+  建立时间：2026-11-09
+  使用模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>任务三 · 综合创作 | 金鑫 24001010530</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <style>
+    body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#f6f8fc;color:#1f2937;max-width:920px;margin:0 auto;padding:34px 20px 60px}
+
+    /* ── 页头 ── */
+    .jx530-head{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);border-radius:20px;padding:36px 38px;color:#fff;margin-bottom:14px;box-shadow:0 12px 30px rgba(15,43,91,.3)}
+    .jx530-head .jx530-badge{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+    .jx530-head h1{margin:0;font-size:27px}
+    .jx530-head h1 b{color:#ffd166}
+    .jx530-head p{margin-top:12px;font-size:14.5px;color:#d9e3f5;line-height:2}
+    .jx530-head .jx530-goals{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+    .jx530-head .jx530-goals i{font-style:normal;font-size:13px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:8px}
+
+    .jx530-note{background:#fffbea;border:1px solid #fde68a;border-radius:16px;padding:18px 22px;margin-bottom:30px;font-size:14px;color:#7c5e10;line-height:2}
+    .jx530-note b{color:#b45309}
+
+    /* ── 白卡片章节 ── */
+    .jx530-sec{background:#fff;border-radius:18px;padding:28px 30px;margin-bottom:26px;border:1px solid #e8ecf5;box-shadow:0 4px 14px rgba(31,41,55,.06);position:relative;overflow:hidden}
+    .jx530-sec::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(#0f2b5b,#1d5bbf)}
+    .jx530-sec-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+    .jx530-sec-head .jx530-no{flex:none;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;font-size:19px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+    .jx530-sec-head h2{margin:0;font-size:20px;color:#111827}
+    .jx530-sec-head small{display:block;font-weight:normal;color:#9ca3af;font-size:13px;margin-top:3px}
+    .jx530-sec p.jx530-txt{font-size:14.5px;color:#374151;line-height:2;margin:0 0 10px}
+    .jx530-sec p.jx530-txt b{color:#0f2b5b}
+    .jx530-sec code{background:#eef2ff;color:#1d4ed8;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+
+    /* ── 展品卡 ── */
+    .jx530-ship{display:flex;gap:20px;align-items:stretch;border:1px solid #eef1f8;border-radius:14px;padding:16px;margin:16px 0;flex-wrap:wrap}
+    .jx530-ship img{width:320px;max-width:100%;border-radius:12px;object-fit:cover;flex:none}
+    .jx530-ship .jx530-ship-info{flex:1;min-width:220px}
+    .jx530-ship h3{margin:4px 0 8px;font-size:18px;color:#0f2b5b}
+    .jx530-ship p{margin:0 0 10px;font-size:13.8px;color:#374151;line-height:2}
+    .jx530-ai-tag{display:inline-block;font-size:11.5px;color:#7c5e10;background:#fffbea;border:1px solid #fde68a;border-radius:999px;padding:3px 10px}
+
+    /* ── 对话气泡 ── */
+    .jx530-round{border:1px solid #eef1f8;border-radius:14px;padding:16px 18px;margin:16px 0}
+    .jx530-round h3{margin:0 0 12px;font-size:15px;color:#0f2b5b}
+    .jx530-round h3 span{font-size:12px;color:#9ca3af;font-weight:normal;margin-left:8px}
+    .jx530-bubble{max-width:88%;border-radius:14px;padding:12px 16px;font-size:13.5px;line-height:1.9;margin-bottom:12px;white-space:pre-wrap}
+    .jx530-bubble-user{margin-left:auto;background:#1d5bbf;color:#fff;border-bottom-right-radius:4px}
+    .jx530-bubble-ai{background:#f3f5fa;color:#1f2937;border-bottom-left-radius:4px}
+    .jx530-bubble-ai b{color:#0f2b5b}
+    .jx530-bubble pre{margin:8px 0 0;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px 16px;overflow:auto;font-family:Consolas,monospace;font-size:12.8px;line-height:1.8;white-space:pre}
+    .jx530-bubble pre em{color:#7dd3fc;font-style:normal}
+
+    .jx530-verify{border-radius:12px;padding:12px 16px;font-size:13.5px;line-height:2;margin-top:4px}
+    .jx530-verify b{display:block;margin-bottom:2px;font-size:13px}
+    .jx530-verify-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+    .jx530-verify-ok b{color:#15803d}
+
+    .jx530-qa{border-left:3px solid #e8890c;background:#fff7ed;border-radius:0 12px 12px 0;padding:12px 18px;margin:12px 0;font-size:13.8px;line-height:2;color:#7c2d12}
+    .jx530-qa b{color:#c2410c}
+
+    /* ── keyboard 演示轮播 ── */
+    .jx530-demo .jx530-demo-tag{display:inline-block;font-size:12.5px;color:#0f2b5b;background:#e8f0ff;border:1px solid #c7d8f8;border-radius:999px;padding:4px 14px;margin-bottom:12px}
+    .jx530-swiper{width:100%;height:380px;border-radius:16px;overflow:hidden}
+    .jx530-swiper .swiper-slide img{width:100%;height:100%;object-fit:cover;display:block}
+    .jx530-swiper .jx530-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 20px 14px;color:#fff;background:linear-gradient(transparent,rgba(5,15,35,.82))}
+    .jx530-swiper .jx530-cap h3{margin:0;font-size:17px}
+    .jx530-swiper .jx530-cap p{margin:4px 0 0;font-size:13px;color:#dbe6f8}
+    .jx530-swiper .swiper-pagination-bullet{background:#0f2b5b;opacity:.35}
+    .jx530-swiper .swiper-pagination-bullet-active{background:#e8890c;opacity:1;width:22px;border-radius:6px}
+
+    .jx530-home{display:block;text-align:center;margin-top:34px}
+    .jx530-home a{display:inline-block;padding:11px 34px;border-radius:999px;background:#0f2b5b;color:#fff;text-decoration:none;font-size:14px;letter-spacing:1px;transition:background .2s}
+    .jx530-home a:hover{background:#1d5bbf}
+  </style>
+</head>
+<body>
+
+  <!-- ── 页头 ── -->
+  <header class="jx530-head">
+    <span class="jx530-badge">SWIPER 课堂任务 · 第三关 · ⭐⭐⭐</span>
+    <h1>任务三 · <b>综合创作</b>：第六件展品 + 超纲能力</h1>
+    <p>为光影展添加第六件展品<b style="color:#ffd166">爱达·魔都号</b>（首艘国产大型邮轮），图片用 AI 生成；
+       再挑一个课堂上没讲过的 Swiper 能力——我选 <b style="color:#ffd166">keyboard 键盘控制</b>。<br>
+       作者：金鑫 · 学号 24001010530 · 使用模型 GLM-5.3-Flash</p>
+    <div class="jx530-goals">
+      <i>第六件展品 · slide 结构完整</i><i>图片 AI 生成（16:9 横版）</i><i>超纲能力：keyboard</i><i>答辩四问自答</i>
+    </div>
+  </header>
+
+  <div class="jx530-note">
+    📌 <b>使用说明：</b>第 ① 节看展品与 AI 生成图，第 ② 节是与 AI 的关键对话（含 AI 第一次答错的地方），
+    第 ③ 节是 <b>keyboard 控制的真实运行轮播</b>，第 ④ 节是答辩四问的自答。
+  </div>
+
+  <!-- ── ① 第六件展品 ── -->
+  <section class="jx530-sec">
+    <div class="jx530-sec-head">
+      <div class="jx530-no">1</div>
+      <h2>第六件展品 · 爱达·魔都号<small>图片 AI 生成 · 横版 16:9</small></h2>
+    </div>
+    <div class="jx530-ship">
+      <img src="swiper-imgs/aidahao_1.jpg" alt="爱达·魔都号">
+      <div class="jx530-ship-info">
+        <h3>爱达·魔都号 Adora Magic City</h3>
+        <p><b>首艘国产大型邮轮</b>，2024 年 1 月 1 日从上海吴淞口国际邮轮港开启商业首航，
+           可载客 5000 余人，被誉为"海上移动城市"——中国邮轮产业从无到有的里程碑。</p>
+        <p>slide 结构完整：<code>&lt;img&gt;</code> + <code>&lt;h3&gt;标题&lt;/h3&gt;</code> + <code>&lt;p&gt;描述&lt;/p&gt;</code>，
+           已加入光影展<b>全部四个轮播</b>（任务 1-4 演示）作为第 6 张。</p>
+        <span class="jx530-ai-tag">✦ 图片由 AI 生成（提示词见 swiper-prompts.md）</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ② 与 AI 的关键往返 ── -->
+  <section class="jx530-sec">
+    <div class="jx530-sec-head">
+      <div class="jx530-no">2</div>
+      <h2>与 AI 的关键往返<small>keyboard 从"能用"到"好用"</small></h2>
+    </div>
+    <div class="jx530-round">
+      <h3>提问 → 第一次回答 → 追问修正<span>AI 也可能给"能用但不好用"的答案</span></h3>
+      <div class="jx530-bubble jx530-bubble-user">想给 #wySw4 加键盘方向键控制，但页面很长，希望只有轮播在可视区时按键才生效，怎么配？</div>
+      <div class="jx530-bubble jx530-bubble-ai"><b>AI 第一次回答：</b><pre>keyboard: true</pre></div>
+      <div class="jx530-bubble jx530-bubble-user">测试发现页面在别处按方向键也会切轮播、和页面滚动打架。</div>
+      <div class="jx530-bubble jx530-bubble-ai"><b>AI 修正：</b>写成对象并加 onlyInViewport：<pre>keyboard: { <em>enabled: true</em>, <em>onlyInViewport: true</em> }</pre></div>
+      <div class="jx530-verify jx530-verify-ok">
+        <b>验证结论（一句话）</b>
+        滚动到轮播区域按 ArrowRight 翻页生效；轮播不在视口时按键不误触发；爱达·魔都号第 6 张在四个轮播正常显示、图片 200，控制台无报错。✅
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ③ 实测演示 ── -->
+  <section class="jx530-sec jx530-demo">
+    <div class="jx530-sec-head">
+      <div class="jx530-no">3</div>
+      <h2>验证演示<small>keyboard 键盘控制的真实运行轮播</small></h2>
+    </div>
+    <span class="jx530-demo-tag">下方轮播 = keyboard 配置逐字运行 · 先用鼠标点一下图片，再按键盘 ← → 方向键翻页</span>
+    <div class="swiper jx530-swiper" id="jx530Sw3">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="swiper-imgs/aidahao_1.jpg" alt="爱达·魔都号"><div class="jx530-cap"><h3>爱达·魔都号</h3><p>第六件展品 · 首艘国产大型邮轮 · 2024 年 1 月首航</p></div></div>
+        <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="jx530-cap"><h3>天宫空间站</h3><p>中国人在太空的家</p></div></div>
+        <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号"><div class="jx530-cap"><h3>复兴号高铁</h3><p>中国速度 · 350km/h</p></div></div>
+        <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919"><div class="jx530-cap"><h3>C919 大飞机</h3><p>国产大飞机商业首航</p></div></div>
+        <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="jx530-cap"><h3>中国天眼 FAST</h3><p>500 米口径 · 观天巨目</p></div></div>
+      </div>
+      <div class="swiper-pagination" id="jx530Pag3"></div>
+    </div>
+    <p class="jx530-txt" style="margin-top:12px">观察重点：<b>方向键能翻页</b>；把页面滚到轮播看不见时按方向键——<b>不会误触发</b>（onlyInViewport 生效）。</p>
+  </section>
+
+  <!-- ── ④ 答辩四问 ── -->
+  <section class="jx530-sec">
+    <div class="jx530-sec-head">
+      <div class="jx530-no">4</div>
+      <h2>答辩四问 · 自答<small>课堂分就在这四问里</small></h2>
+    </div>
+    <div class="jx530-qa"><b>① 这段代码什么意思？</b><br>keyboard 模块监听 document 的方向键事件；enabled: true 开启功能；onlyInViewport: true 限定只有轮播容器在可视区内才响应，避免长页面滚动时误触发。</div>
+    <div class="jx530-qa"><b>② AI 第一次给的哪里不对、你改了什么？</b><br>AI 给的 keyboard: true 是全局生效——页面任何位置按方向键都会切轮播。我把简写改成对象写法，补 onlyInViewport: true 限定视口。</div>
+    <div class="jx530-qa"><b>③ 新参数的作用？</b><br>onlyInViewport 让键盘监听"看位置"：轮播滚出视口就忽略按键，滚回来才恢复，这是简写形式给不了的精细控制。</div>
+    <div class="jx530-qa"><b>④ 现场把 delay 改成指定值并解释预期变化？</b><br>把 autoplay.delay 从 3200 改成 1600：自动翻页间隔缩短一半，动画时长 speed: 800 不变，观感更急促；因为配置抽成了共用函数 jx530_sw4Config(fx)，改一处，初始和所有效果重建后都生效。</div>
+  </section>
+
+  <div class="jx530-home"><a href="index.html">← 返回课程首页 index.html</a></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    // 功能名称：jx530_initDemo —— 初始化 keyboard 验证演示轮播
+    // 简介：逐字使用任务三的 keyboard 配置（enabled + onlyInViewport），
+    //       第一张为第六件展品爱达·魔都号，不加自动播放以便专心演示方向键
+    function jx530_initDemo() {
+      new Swiper("#jx530Sw3", {
+        loop: true,
+        speed: 800,
+        keyboard: { enabled: true, onlyInViewport: true },  // 任务三②：课堂未讲能力
+        pagination: { el: "#jx530Pag3", clickable: true },
+      });
+    }
+    jx530_initDemo();
+  </script>
+</body>
+</html>

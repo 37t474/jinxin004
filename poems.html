@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!--
+  功能名称：诗词展示页（上图下文）· 三档进阶任务版
+  功能简介：通过本地数据服务器（localhost:3004）获取 db/db.json 中 poems 的
+            图片(pic)、标题(title)、内容(content)、作者(author)，渲染为上图下文卡片；
+            用 Promise.all 同时取回 /poems 与 /api/authors 两份数据；
+            支持关键字搜索（只显示标题或内容匹配的诗词）与"按标题长度排序"按钮
+  作者：金鑫　学号：24001010530
+  建立时间：2026-11-12　使用模型：GLM-5.3-Flash
+  启动方式：先在 db 目录运行 node server.js，再访问 http://localhost:3004/poems.html
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>诗词展示 · 上图下文（三档进阶）| 金鑫 24001010530</title>
+  <style>
+    body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#f6f8fc;color:#1f2937;max-width:1020px;margin:0 auto;padding:34px 20px 60px}
+
+    /* ── 页头 ── */
+    .jx530-head{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);border-radius:20px;padding:34px 38px;color:#fff;margin-bottom:20px;box-shadow:0 12px 30px rgba(15,43,91,.3)}
+    .jx530-head .jx530-badge{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+    .jx530-head h1{margin:0;font-size:26px}
+    .jx530-head h1 b{color:#ffd166}
+    .jx530-head p{margin-top:12px;font-size:14px;color:#d9e3f5;line-height:2}
+    .jx530-head code{background:rgba(255,255,255,.16);color:#ffd166;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+
+    /* ── 工具栏：搜索框 + 排序按钮（任务三） ── */
+    .jx530-toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+    .jx530-search{flex:1;min-width:220px;padding:12px 18px;border:1.5px solid #c7d8f8;border-radius:999px;font-size:14.5px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+    .jx530-search:focus{border-color:#1d5bbf;box-shadow:0 0 0 3px rgba(29,91,191,.14)}
+    .jx530-sort{padding:12px 22px;border:none;border-radius:999px;background:#0f2b5b;color:#fff;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .2s;white-space:nowrap}
+    .jx530-sort:hover{background:#1d5bbf}
+
+    /* ── 作者栏（任务二：/api/authors 的数据） ── */
+    .jx530-authors{background:#fff;border:1px solid #e8ecf5;border-radius:14px;padding:12px 18px;margin-bottom:20px;font-size:13.5px;color:#374151;line-height:2;display:none}
+    .jx530-authors.jx530-show{display:block}
+    .jx530-authors b{color:#0f2b5b}
+    .jx530-authors .jx530-author-pill{display:inline-block;margin:2px 6px 2px 0;padding:3px 12px;border-radius:999px;background:#e8f0ff;color:#1d4ed8;border:1px solid #c7d8f8}
+
+    /* ── 状态提示 ── */
+    .jx530-status{border-radius:14px;padding:16px 20px;font-size:14px;line-height:2;margin-bottom:22px;display:none}
+    .jx530-status.jx530-show{display:block}
+    .jx530-status.jx530-loading{background:#fffbea;border:1px solid #fde68a;color:#7c5e10}
+    .jx530-status.jx530-error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+
+    /* ── 卡片网格：上图下文 ── */
+    .jx530-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+    .jx530-card{background:#fff;border:1px solid #e8ecf5;border-radius:16px;overflow:hidden;box-shadow:0 4px 14px rgba(31,41,55,.08);transition:transform .25s,box-shadow .25s}
+    .jx530-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(15,43,91,.16)}
+    .jx530-card img{display:block;width:100%;height:200px;object-fit:cover}      /* 上：图 */
+    .jx530-card .jx530-body{padding:16px 18px 18px}                              /* 下：文 */
+    .jx530-card h3{margin:0 0 8px;font-size:16.5px;color:#0f2b5b}
+    .jx530-card .jx530-author{display:inline-block;margin-bottom:6px;font-size:12px;color:#7c5e10;background:#fffbea;border:1px solid #fde68a;border-radius:999px;padding:2px 10px}
+    .jx530-card p{margin:0;font-size:13.5px;color:#4b5563;line-height:2}
+
+    /* ── 搜索无结果 ── */
+    .jx530-empty{display:none;text-align:center;padding:40px 0;color:#9ca3af;font-size:14px}
+    .jx530-empty.jx530-show{display:block}
+
+    .jx530-home{display:block;text-align:center;margin-top:36px}
+    .jx530-home a{display:inline-block;padding:11px 34px;border-radius:999px;background:#0f2b5b;color:#fff;text-decoration:none;font-size:14px;letter-spacing:1px;transition:background .2s}
+    .jx530-home a:hover{background:#1d5bbf}
+  </style>
+</head>
+<body>
+
+  <!-- ── 页头 ── -->
+  <header class="jx530-head">
+    <span class="jx530-badge">三档进阶 · 数据我来定 + 加交互 · 端口 3004</span>
+    <h1>诗词展示 · <b>上图下文</b></h1>
+    <p>页面通过 <code>Promise.all</code> 同时请求 <code>/poems</code> 与 <code>/api/authors</code> 两个接口，
+       支持关键字搜索与按标题长度排序。作者：金鑫 · 24001010530</p>
+  </header>
+
+  <!-- ── 工具栏：搜索框 + 排序按钮（任务三） ── -->
+  <div class="jx530-toolbar">
+    <input type="text" class="jx530-search" id="jx530Search"
+           placeholder="🔍 输入关键字，只显示标题或内容匹配的诗词…">
+    <button class="jx530-sort" id="jx530Sort">按标题长度排序 ↑</button>
+  </div>
+
+  <!-- ── 作者栏（任务二：/api/authors 数据） ── -->
+  <div class="jx530-authors" id="jx530Authors"></div>
+
+  <!-- ── 状态提示 ── -->
+  <div class="jx530-status jx530-loading jx530-show" id="jx530Loading">⏳ 正在从本地服务器获取诗词与作者数据…</div>
+  <div class="jx530-status jx530-error" id="jx530Error"></div>
+
+  <!-- ── 卡片容器（上图下文） ── -->
+  <div class="jx530-grid" id="jx530Grid"></div>
+  <div class="jx530-empty" id="jx530Empty">没有匹配“关键字”的诗词，换个词试试～</div>
+
+  <div class="jx530-home"><a href="index.html">← 返回课程首页 index.html</a></div>
+
+  <script>
+    var jx530_poems = [];      // 缓存全部诗词，搜索/排序只过滤缓存，不重新请求
+    var jx530_sortAsc = true;  // 排序方向：true=从短到长，false=从长到短
+
+    // 功能名称：jx530_loadData —— 用 Promise.all 同时取回 poems 和 authors 两份数据
+    // 简介：两个 fetch 各自 .json() 解析，Promise.all 等两份都到齐再渲染；
+    //       任一接口失败进入 catch 显示红色提示（服务器没启动时页面不白屏）
+    function jx530_loadData() {
+      Promise.all([
+        fetch("http://localhost:3004/poems").then(function (res) {
+          if (!res.ok) throw new Error("/poems 返回 " + res.status);
+          return res.json();           // 第二个 then 里拿到的才是解析好的数组
+        }),
+        fetch("http://localhost:3004/api/authors").then(function (res) {
+          if (!res.ok) throw new Error("/api/authors 返回 " + res.status);
+          return res.json();
+        }),
+      ])
+        .then(function (results) {
+          jx530_poems = results[0];    // 第一份：诗词数组
+          jx530_renderAuthors(results[1]);  // 第二份：作者列表
+          document.getElementById("jx530Loading").classList.remove("jx530-show");
+          jx530_render(jx530_poems);   // 首次渲染全部
+        })
+        .catch(function (err) {
+          document.getElementById("jx530Loading").classList.remove("jx530-show");
+          var box = document.getElementById("jx530Error");
+          box.classList.add("jx530-show");
+          box.textContent = "❌ 获取数据失败（" + err.message +
+            "）。请先在 db 目录运行：node server.js，再刷新本页。";
+        });
+    }
+
+    // 功能名称：jx530_renderAuthors —— 渲染作者栏（/api/authors 返回的列表）
+    function jx530_renderAuthors(authors) {
+      var box = document.getElementById("jx530Authors");
+      var pills = authors.map(function (a) {
+        return '<span class="jx530-author-pill">' + a + '</span>';
+      }).join("");
+      box.innerHTML = "<b>共 " + authors.length + " 位诗人：</b>" + pills;
+      box.classList.add("jx530-show");
+    }
+
+    // 功能名称：jx530_render —— 按传入的数组渲染"上图下文"卡片列表
+    // 简介：清空容器后逐条生成卡片：上 <img>(pic)，下作者、标题(title)、内容(content)
+    function jx530_render(list) {
+      var grid = document.getElementById("jx530Grid");
+      grid.innerHTML = "";
+      list.forEach(function (p) {
+        var card = document.createElement("div");
+        card.className = "jx530-card";
+        card.innerHTML =
+          '<img src="' + p.pic + '" alt="' + p.title + '">' +   // 上：图
+          '<div class="jx530-body">' +                          // 下：文
+            '<h3>' + p.title + '</h3>' +
+            '<span class="jx530-author">' + (p.author || "佚名") + '</span>' +
+            '<p>' + p.content + '</p>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+      // 搜索后一条都不剩时显示"空状态"提示
+      var empty = document.getElementById("jx530Empty");
+      empty.classList.toggle("jx530-show", list.length === 0);
+      empty.textContent = list.length === 0 ? "没有匹配的诗词，换个词试试～" : "";
+    }
+
+    // 功能名称：jx530_bindSearch —— 绑定搜索框输入事件
+    // 简介：每输入一个字符就过滤缓存：只保留 标题或内容 包含关键字的诗词，
+    //       数据仍来自首次 fetch，不重新请求服务器（任务三要求）
+    function jx530_bindSearch() {
+      document.getElementById("jx530Search").addEventListener("input", function () {
+        var kw = this.value.trim();
+        if (!kw) return jx530_render(jx530_poems);   // 关键字为空 = 显示全部
+        var hit = jx530_poems.filter(function (p) {
+          return p.title.indexOf(kw) !== -1 || p.content.indexOf(kw) !== -1;
+        });
+        jx530_render(hit);
+      });
+    }
+
+    // 功能名称：jx530_bindSort —— 绑定"按标题长度排序"按钮
+    // 简介：每次点击切换升/降序（标题字符数），排序后立即重渲染，按钮文字同步更新
+    function jx530_bindSort() {
+      var btn = document.getElementById("jx530Sort");
+      btn.addEventListener("click", function () {
+        jx530_sortAsc = !jx530_sortAsc;
+        var kw = document.getElementById("jx530Search").value.trim();
+        var list = kw
+          ? jx530_poems.filter(function (p) {
+              return p.title.indexOf(kw) !== -1 || p.content.indexOf(kw) !== -1;
+            })
+          : jx530_poems.slice();          // slice 复制一份再排，不打乱原缓存顺序
+        list.sort(function (a, b) {
+          return jx530_sortAsc ? a.title.length - b.title.length
+                               : b.title.length - a.title.length;
+        });
+        btn.textContent = jx530_sortAsc ? "按标题长度排序 ↑" : "按标题长度排序 ↓";
+        jx530_render(list);
+      });
+    }
+
+    jx530_loadData();
+    jx530_bindSearch();
+    jx530_bindSort();
+  </script>
+</body>
+</html>

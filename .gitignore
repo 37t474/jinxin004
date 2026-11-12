@@ -1,0 +1,6 @@
+# 依赖目录（node 安装的包不入库，package.json / package-lock.json 保留）
+db/node_modules/
+
+# 系统与编辑器杂项
+Thumbs.db
+.DS_Store

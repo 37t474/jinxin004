@@ -566,3 +566,28 @@ AI任务提示词不需要展现出前端页面，只需要有提示词
   4. 答辩四问答案在对话中给出。
 
 ---
+
+## 2026-11-16 13:55:52
+
+- **模型**：GLM-5.3-Flash
+- **提示词**：
+
+```text
+根据项目指导书帮我完成任务一二三四
+（附图：教师站 mobile-events-lesson《按下·滑动·缩放——移动端常用触摸事件怎么用》，
+第 7 节"课堂实践任务：4 关递进"——
+任务一 事件侦探（观察记录，不写代码）；
+任务二 手势卡片 mobile-gesture.html（changedTouches 横向位移、阈值 40px、
+touch-action:pan-y、0.3s 过渡、300ms 冷却）；
+任务三 图片查看器 mobile-zoom.html（双指缩放 1~4 倍、两指中点基准、
+单指拖动、双击 1x/2x、0.25s 过渡）；
+任务四 mobile-sensor.html 摇一摇抽菜谱（devicemotion、阈值 18、1.5s 冷却、降级按钮）
+```
+
+- **执行内容**：
+  1. 新建 mobile-gesture.html：4 张美食卡片、阈值/冷却/边界提示齐全。
+  2. 新建 mobile-zoom.html：双指缩放（中点基准保证缩放不跳）、边界约束、双击切换、比例指示器。
+  3. 新建 mobile-sensor.html：devicemotion 摇一摇 + iOS 权限引导 + 3s 探测降级"点我抽一次"。
+  4. 任务一观察记录答案在对话中给出；index.html 新增三个入口。
+
+---

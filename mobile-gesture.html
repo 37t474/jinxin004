@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+  功能名称：手势卡片 · 左右滑动切换中华美食（移动端触摸事件 · 任务二）
+  功能简介：监听 touchstart / touchend，用 changedTouches[0] 计算横向位移（阈值 40px），
+            左滑切下一张、右滑切上一张，共 4 道菜；边界给出提示；
+            touch-action:pan-y 保证竖向能滚动、横向手势自己接管；
+            切换带 0.3s 过渡动画，300ms 冷却防误触连滑
+  作者：金鑫　学号：24001010530
+  建立时间：2026-11-16　使用模型：GLM-5.3-Flash
+  验收提示：请用手机打开，或 Chrome DevTools 的设备模式（触摸模拟）体验
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <!-- ① 移动端页面三件套之一：视口，不写会整体缩小 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手势卡片 · 中华美食 | 金鑫 24001010530</title>
+  <style>
+    /* ② 全局去掉点击灰块（iOS / 安卓默认） */
+    * { -webkit-tap-highlight-color: transparent; }
+    body{margin:0;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#17153a;color:#eef0ff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 0 60px}
+    .jx530-head{text-align:center;margin-bottom:26px;padding:0 20px}
+    .jx530-head h1{margin:0;font-size:24px;color:#fff}
+    .jx530-head h1 b{color:#ffd166}
+    .jx530-head p{margin:10px 0 0;font-size:13px;color:#b9b3ff;line-height:2}
+
+    /* ③ 手势区容器：touch-action:pan-y —— 横向手势归我、竖向交给浏览器滚动；
+       只加在要接管手势的容器上，不是加在 body 上 */
+    .jx530-stage{width:min(86vw,420px);overflow:hidden;border-radius:20px;touch-action:pan-y;
+      box-shadow:0 18px 46px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);user-select:none}
+    .jx530-track{display:flex;width:400%;transition:transform .3s ease}
+    .jx530-slide{width:25%;box-sizing:border-box;padding:20px 22px 26px;background:linear-gradient(160deg,#241f57,#3a2c7d);min-height:430px}
+    .jx530-slide img{display:block;width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:14px;border:1px solid rgba(255,255,255,.18)}
+    .jx530-slide .jx530-no{display:inline-block;font-size:12px;letter-spacing:3px;color:#ffd166;border:1px solid rgba(255,209,102,.5);border-radius:999px;padding:3px 12px;margin-bottom:14px}
+    .jx530-slide h2{margin:0 0 12px;font-size:26px;color:#fff}
+    .jx530-slide h3{margin:18px 0 6px;font-size:14px;color:#ffd166}
+    .jx530-slide p{margin:0;font-size:13.5px;line-height:2;color:#dcd9ff}
+
+    /* 底部页码与提示 */
+    .jx530-foot{width:min(86vw,420px);text-align:center;margin-top:18px}
+    .jx530-page{font-size:15px;color:#cfcaff;letter-spacing:2px}
+    .jx530-tip{margin-top:10px;font-size:13px;color:#9d97e8;min-height:20px;transition:opacity .2s}
+    .jx530-tip.jx530-hot{color:#ff9d9d}
+
+    .jx530-home{margin-top:34px}
+    .jx530-home a{display:inline-block;padding:10px 30px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;text-decoration:none;font-size:13.5px}
+  </style>
+</head>
+<body>
+
+  <div class="jx530-head">
+    <h1>手势卡片 · <b>中华美食</b></h1>
+    <p>左右滑动切换菜卡（阈值 40px · 300ms 冷却）　作者：金鑫 · 24001010530</p>
+  </div>
+
+  <!-- 手势区：整块滑动舞台 -->
+  <div class="jx530-stage" id="jx530Stage">
+    <div class="jx530-track" id="jx530Track"></div>
+  </div>
+
+  <div class="jx530-foot">
+    <div class="jx530-page" id="jx530Page">第 1/4 张</div>
+    <div class="jx530-tip" id="jx530Tip">← 左滑下一张 · 右滑上一张 →</div>
+  </div>
+
+  <div class="jx530-home"><a href="index.html">← 返回课程首页 index.html</a></div>
+
+  <script>
+    // ── 菜品数据：图片、菜名、简介、演变背景 ──
+    var jx530_dishes = [
+      { name:"宫保鸡丁", pic:"img/gongbaojiding.jpg", brief:"糊辣荔枝味，鸡肉的嫩与花生的脆在一口里相遇。",
+        story:"源自清代丁宝桢的家厨做法，“宫保”是他的官衔，鲁菜入川后扎根成了川菜名片。" },
+      { name:"麻婆豆腐", pic:"img/mapodoufu.jpg", brief:"麻、辣、烫、香、酥、嫩、鲜、活，八字真言缺一不可。",
+        story:"清同治年间成都万福桥陈刘氏（人称陈麻婆）所创，最初是给挑夫解乏的便宜豆腐。" },
+      { name:"锅包肉", pic:"img/guobaorou.jpg", brief:"外酥里嫩、酸甜适口，是东北宴席上的硬菜担当。",
+        story:"清末哈尔滨道台府厨师郑兴文为适应外宾口味，把焦炒肉片改成糖醋汁，成就了这道东北名菜。" },
+      { name:"佛跳墙", pic:"img/fotiaoqiang.jpg", brief:"坛启荤香飘四邻，佛闻弃禅跳墙来。",
+        story:"清光绪年间福州聚春园菜馆郑春发改创“福寿全”，文人即席赋诗得名，闽菜之首。" }
+    ];
+
+    var jx530_index = 0;       // 当前卡片段（0~3）
+    var jx530_startX = 0;      // 按下时的起点横坐标
+    var jx530_lock = false;    // 冷却锁：300ms 内不允许再次切换（防连滑跳两张）
+    var jx530_line = 40;       // 滑动阈值：小于 40px 视为误触/点击，不切换
+    var jx530_track = document.getElementById("jx530Track");
+
+    // 功能名称：jx530_build —— 把菜品数据生成为 4 张滑块卡片
+    function jx530_build() {
+      jx530_track.innerHTML = jx530_dishes.map(function (d, i) {
+        return '<div class="jx530-slide">' +
+          '<img src="' + d.pic + '" alt="' + d.name + '">' +   // 菜品照片
+          '<span class="jx530-no">NO.' + (i + 1) + '</span>' +
+          '<h2>' + d.name + '</h2>' +
+          '<h3>简介</h3><p>' + d.brief + '</p>' +
+          '<h3>演变背景</h3><p>' + d.story + '</p>' +
+        '</div>';
+      }).join("");
+    }
+
+    // 功能名称：jx530_showTip —— 底部提示条（含边界提示，2 秒后淡回默认文案）
+    function jx530_showTip(text, hot) {
+      var tip = document.getElementById("jx530Tip");
+      tip.textContent = text;
+      tip.classList.toggle("jx530-hot", !!hot);
+      clearTimeout(jx530_showTip.jx530_t);
+      jx530_showTip.jx530_t = setTimeout(function () {
+        tip.textContent = "← 左滑下一张 · 右滑上一张 →";
+        tip.classList.remove("jx530-hot");
+      }, 2000);
+    }
+
+    // 功能名称：jx530_go —— 切换到指定卡片（带边界检查 + 页码更新）
+    function jx530_go(step) {
+      var next = jx530_index + step;
+      if (next < 0) return jx530_showTip("已经是第一张啦", true);      // 边界提示
+      if (next > jx530_dishes.length - 1) return jx530_showTip("已经是最后一张啦", true);
+      jx530_index = next;
+      jx530_track.style.transform = "translateX(-" + jx530_index * 25 + "%)";  // 0.3s 过渡
+      document.getElementById("jx530Page").textContent =
+        "第 " + (jx530_index + 1) + "/" + jx530_dishes.length + " 张";
+    }
+
+    var jx530_stage = document.getElementById("jx530Stage");
+
+    // 功能名称：手势监听 —— touchstart 记起点，touchend 用 changedTouches[0] 判方向
+    // 简介：抬起的那根手指要从 changedTouches 里拿（touches 里已经没有它了）；
+    //       位移小于阈值 line 视为点击不切换；切换后 300ms 冷却防连滑跳两张
+    jx530_stage.addEventListener("touchstart", function (e) {
+      jx530_startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    jx530_stage.addEventListener("touchend", function (e) {
+      if (jx530_lock) return;                                   // 冷却中：忽略
+      var dx = e.changedTouches[0].clientX - jx530_startX;      // 横向位移
+      if (Math.abs(dx) < jx530_line) return;                    // 阈值不足 = 误触，不切换
+      jx530_lock = true;                                        // 上锁，300ms 后解锁
+      setTimeout(function () { jx530_lock = false; }, 300);
+      jx530_go(dx < 0 ? 1 : -1);                                // 左滑下一张，右滑上一张
+    });
+
+    jx530_build();
+  </script>
+</body>
+</html>

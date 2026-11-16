@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--
+  功能名称：移动端触摸事件 · 4 关递进任务总览（任务一二三四导航页）
+  功能简介：index 目录的合并入口——本页列出任务一至任务四四个小目录卡片，
+            任务一（事件侦探·观察记录）点击展开参考答案，任务二/三/四分别
+            跳转到对应实现页面（手势卡片 / 图片查看器 / 摇一摇抽菜谱）
+  作者：金鑫　学号：24001010530
+  建立时间：2026-11-16　使用模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>移动端触摸事件 · 任务总览 | 金鑫 24001010530</title>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body{margin:0;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#17153a;color:#eef0ff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 16px 60px;box-sizing:border-box}
+    .jx530-head{text-align:center;margin-bottom:28px}
+    .jx530-head h1{margin:0;font-size:24px;color:#fff}
+    .jx530-head h1 b{color:#ffd166}
+    .jx530-head p{margin:10px 0 0;font-size:13px;color:#b9b3ff;line-height:2}
+
+    /* ── 任务卡片：点击进入 / 展开 ── */
+    .jx530-list{width:min(92vw,460px);display:flex;flex-direction:column;gap:14px}
+    .jx530-task{display:block;background:linear-gradient(160deg,#241f57,#3a2c7d);border:1px solid rgba(255,255,255,.14);
+      border-radius:16px;padding:18px 20px;text-decoration:none;color:#eef0ff;
+      box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .15s}
+    .jx530-task:hover{transform:translateY(-2px)}
+    .jx530-task .jx530-badge{display:inline-block;font-size:12px;letter-spacing:2px;color:#ffd166;
+      border:1px solid rgba(255,209,102,.5);border-radius:999px;padding:3px 12px;margin-bottom:8px}
+    .jx530-task h2{margin:0 0 6px;font-size:18px;color:#fff}
+    .jx530-task p{margin:0;font-size:13px;line-height:1.9;color:#cfc9ff}
+    .jx530-task .jx530-go{margin-top:10px;font-size:12.5px;color:#7ee2ff}
+
+    /* 任务一：details 展开参考答案 */
+    details.jx530-task summary{cursor:pointer;list-style:none}
+    details.jx530-task summary::-webkit-details-marker{display:none}
+    .jx530-ans{margin-top:12px;background:rgba(0,0,0,.28);border-radius:12px;padding:12px 14px;
+      font-size:12.5px;line-height:2;color:#dcd9ff}
+    .jx530-ans b{color:#ffd166}
+
+    .jx530-home{margin-top:34px}
+    .jx530-home a{display:inline-block;padding:10px 30px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;text-decoration:none;font-size:13.5px}
+  </style>
+</head>
+<body>
+
+  <div class="jx530-head">
+    <h1>移动端触摸事件 · <b>4 关递进任务</b></h1>
+    <p>观察记录 → 手势实现 → 综合交互 → 设备能力 + 排错　作者：金鑫 · 24001010530</p>
+  </div>
+
+  <div class="jx530-list">
+
+    <!-- 任务一：观察记录题，点击展开参考答案 -->
+    <details class="jx530-task">
+      <summary>
+        <span class="jx530-badge">⭐ 任务一</span>
+        <h2>事件侦探：一次拖动到底发生了什么</h2>
+        <p>观察记录题 · 不写代码——在讲解站第 3 节探针区做 5 种操作并记录事件顺序（点我展开参考答案）</p>
+      </summary>
+      <div class="jx530-ans">
+        <b>①</b> 一次拖动 touchmove 触发次数与距离有关：距离越远触发越多（每帧一次，拖 300px 约 15~20 次）；<br>
+        <b>②</b> click 在 touchend <b>之后</b>：顺序固定为 touchstart → 若干 touchmove → touchend → click；<br>
+        <b>③</b> touchend 换成 touchcancel：正常抬起不再触发（cancel 只在来电、消息横幅等系统打断时来），
+        click 一般也不补发——清理逻辑必须同时放 touchend 和 touchcancel，否则状态卡死；<br>
+        <b>加分·轨迹草图</b>：起点（touchstart）→ 连续 touchmove 坐标折线 → 终点（touchend），click 落点在终点附近。
+      </div>
+    </details>
+
+    <!-- 任务二：手势卡片 -->
+    <a class="jx530-task" href="mobile-gesture.html">
+      <span class="jx530-badge">⭐⭐ 任务二</span>
+      <h2>手势卡片：左右滑动切换内容</h2>
+      <p>4 道中华美食卡（照片+简介+演变背景），touchstart/touchend + changedTouches 算位移，阈值 40px，边界提示，0.3s 过渡 + 300ms 冷却</p>
+      <span class="jx530-go">进入实现页 → mobile-gesture.html</span>
+    </a>
+
+    <!-- 任务三：图片查看器 -->
+    <a class="jx530-task" href="mobile-zoom.html">
+      <span class="jx530-badge">⭐⭐⭐ 任务三</span>
+      <h2>图片查看器：双指缩放 + 双击放大 + 拖动</h2>
+      <p>双指捏合 1~4x、Math.atan2 双指旋转 ±30°（两指中点为基准不跳走）、边界阻尼回弹、1x 禁拖、旋转屏幕不丢状态、比例指示器</p>
+      <span class="jx530-go">进入实现页 → mobile-zoom.html</span>
+    </a>
+
+    <!-- 任务四：摇一摇 -->
+    <a class="jx530-task" href="mobile-sensor.html">
+      <span class="jx530-badge">⭐⭐⭐⭐ 任务四</span>
+      <h2>摇一摇彩蛋（方案 A）</h2>
+      <p>devicemotion 合成加速度 &gt; 18 判定摇动、1.5s 冷却、随机抽菜谱弹出动画；无传感器/iOS 未授权时降级"点我抽一次"</p>
+      <span class="jx530-go">进入实现页 → mobile-sensor.html</span>
+    </a>
+
+  </div>
+
+  <div class="jx530-home"><a href="index.html">← 返回课程首页 index.html</a></div>
+
+</body>
+</html>

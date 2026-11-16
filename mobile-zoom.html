@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <!--
-  功能名称：图片查看器 · 双指缩放 + 双击放大 + 单指拖动（移动端触摸事件 · 任务三）
-  功能简介：双指按捏合距离比例缩放（1~4 倍），以两指中点为缩放基准保证"缩放不跳"；
-            放大后单指拖动查看细节，松手自动约束回边界；缩到 1x 自动居中；
-            双击（双 tap）在 1x 与 2x 之间切换，带 0.25s 过渡；右上角缩放比例指示器
+  功能名称：图片查看器 · 双指缩放 + 双指旋转 + 双击放大 + 单指拖动（移动端触摸事件 · 任务三）
+  功能简介：双指按捏合距离比例缩放（1~4 倍）、Math.atan2 角度差实现双指旋转（±30°），
+            两种手势都以两指中点为基准（动态 transform-origin），图片不会"跳走"；
+            单指拖动带边界阻尼（超出部分衰减），松手回弹约束在边界内；1x 时不能拖动；
+            双击（双 tap）在 1x 与 2x 之间切换，带 0.25s 过渡；缩放/旋转比例指示器；
+            旋转屏幕（orientationchange/resize）后自动按新尺寸约束，状态不丢失
   作者：金鑫　学号：24001010530
   建立时间：2026-11-16　使用模型：GLM-5.3-Flash
   验收提示：双指手势请用手机打开体验；桌面可双击切换 1x/2x
@@ -12,7 +14,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>图片查看器 · 双指缩放 | 金鑫 24001010530</title>
+  <title>图片查看器 · 双指缩放与旋转 | 金鑫 24001010530</title>
   <style>
     * { -webkit-tap-highlight-color: transparent; }
     body{margin:0;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#101828;color:#eef2ff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:36px 0 60px}
@@ -22,16 +24,16 @@
     .jx530-head p{margin:8px 0 0;font-size:13px;color:#8fa3c8;line-height:2}
 
     /* ── 查看器容器：overflow 裁剪 + 接管全部手势 ── */
-    .jx530-viewer{position:relative;width:min(92vw,460px);height:min(64vh,420px);overflow:hidden;
+    .jx530-viewer{position:relative;width:min(92vw,460px);height:min(62vh,420px);overflow:hidden;
       border-radius:18px;border:1px solid rgba(255,255,255,.14);
       touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
       background:#0b0f1a}
     .jx530-viewer img{position:absolute;left:0;top:0;width:100%;height:100%;
       object-fit:cover;transform-origin:0 0;pointer-events:none}
-    /* 0.25s 过渡：只在双击/回弹时打开（jx530-anim 类），手势进行中关闭避免"拖不动" */
+    /* 0.25s 过渡：只在双击/松手回弹时打开（jx530-anim 类），手势进行中关闭避免"拖不动" */
     .jx530-viewer img.jx530-anim{transition:transform .25s ease}
 
-    /* 缩放比例指示器（加分项） */
+    /* 缩放/旋转比例指示器（加分项） */
     .jx530-scale{position:absolute;top:10px;right:10px;z-index:5;padding:4px 12px;border-radius:999px;
       background:rgba(0,0,0,.55);color:#7ee2b8;font-size:13px;letter-spacing:1px;border:1px solid rgba(126,226,184,.4)}
 
@@ -51,8 +53,8 @@
 <body>
 
   <div class="jx530-head">
-    <h1>图片查看器 · <b>双指缩放</b></h1>
-    <p>双指捏合缩放（1~4x）· 单指拖动 · 双击 1x/2x　作者：金鑫 · 24001010530</p>
+    <h1>图片查看器 · <b>双指缩放与旋转</b></h1>
+    <p>双指捏合缩放（1~4x）· 双指旋转（±30°）· 单指拖动 · 双击 1x/2x　作者：金鑫 · 24001010530</p>
   </div>
 
   <div class="jx530-viewer" id="jx530Viewer">
@@ -60,56 +62,97 @@
     <img id="jx530Img" src="img/aidamoduhao.jpg" alt="爱达·魔都号">
   </div>
 
-  <div class="jx530-warn" id="jx530Warn">📱 双指缩放请用手机打开（或 DevTools 设备模式），桌面可双击体验 1x / 2x</div>
+  <div class="jx530-warn" id="jx530Warn">📱 双指缩放/旋转请用手机打开（或 DevTools 设备模式），桌面可双击体验 1x / 2x</div>
 
   <div class="jx530-note">
-    <b>「缩放不跳」是怎么保证的？</b><br>
-    ① 双指开始捏合的瞬间（touchstart 里 touches.length===2）记录初始两指距离和当时的倍数，
-       之后每一帧都用「新距离 ÷ 初始距离 × 初始倍数」算——比例永远从捏合那一刻起算，不会叠加旧数据；<br>
-    ② 缩放基准取<b>两指中点</b>：中点在屏幕上按住不动，图片同一点在缩放前后也要留在原地
-       （tx' = tx + cx·(s−s')），所以图不会突然"跳走"；<br>
-    ③ 手指全部抬起时把位移约束回边界内（scale 为 1 时强制归零居中），不会出现图片"漂出"容器。
+    <b>四个验收点是怎么实现的？</b><br>
+    ① <b>缩放/旋转以两指中心为基准，不"跳走"</b>：捏合开始那一刻，把两指中点换算成图片坐标并设为
+    transform-origin——之后倍数、角度怎么变，这个点都钉在原地；<br>
+    ② <b>边界阻尼</b>：拖动超出边界时超出部分只按 35% 计入（越拉越"沉"），松手后 0.25s 回弹到边界内；<br>
+    ③ <b>1x 不能拖出边界</b>：单指拖动仅在 scale&gt;1 时生效，缩回 1x 强制位移归零居中；<br>
+    ④ <b>旋转屏幕不丢状态</b>：orientationchange/resize（防抖 200ms）后按旋转后的容器尺寸重新计算
+    边界并回弹——倍数、角度、能看到的内容全部保留。
   </div>
 
   <div class="jx530-home"><a href="index.html">← 返回课程首页 index.html</a></div>
 
   <script>
     // ── 状态变量 ──
-    var jx530_scale = 1, jx530_tx = 0, jx530_ty = 0;   // 当前倍数与位移
-    var jx530_s0 = 1;                                   // 双指捏合那一刻的倍数
-    var jx530_d0 = 0;                                   // 双指初始距离
-    var jx530_lx = 0, jx530_ly = 0;                     // 单指拖动起点
-    var jx530_dragging = false;                         // 单指拖动中（scale>1 才有效）
-    var jx530_lastTap = 0;                              // 上次 tap 时间（双击判定）
-    var jx530_MAX = 4, jx530_MIN = 1;                   // 倍数边界
+    var jx530_scale = 1, jx530_tx = 0, jx530_ty = 0, jx530_rot = 0;  // 当前倍数 / 位移 / 角度
+    var jx530_s0 = 1, jx530_rot0 = 0, jx530_ang0 = 0;                // 双指捏合那一刻的倍数 / 角度 / 两指夹角
+    var jx530_d0 = 0;                                                // 双指初始距离
+    var jx530_lx = 0, jx530_ly = 0;                                  // 单指拖动起点
+    var jx530_dragging = false;                                      // 单指拖动中（scale>1 才有效）
+    var jx530_lastTap = 0;                                           // 上次 tap 时间（双击判定）
+    var jx530_MAX = 4, jx530_MIN = 1, jx530_MAXROT = 30;             // 倍数边界与旋转角边界（度）
+    var jx530_DAMP = 0.35;                                           // 阻尼系数：超出边界的部分只计 35%
+    var jx530_ox = 0, jx530_oy = 0;                                  // 当前 transform-origin（图片坐标，变量维护保证跨浏览器一致）
     var jx530_img = document.getElementById("jx530Img");
     var jx530_view = document.getElementById("jx530Viewer");
     var jx530_scaleBox = document.getElementById("jx530Scale");
 
-    // 功能名称：jx530_dist —— 算两根手指的直线距离（勾股定理 Math.hypot）
+    // 功能名称：jx530_dist / jx530_angle —— 两指的直线距离（勾股定理）与夹角（Math.atan2）
     function jx530_dist(t1, t2) {
       return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
     }
+    function jx530_angle(t1, t2) {
+      return Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX) * 180 / Math.PI;
+    }
 
-    // 功能名称：jx530_apply —— 把 scale/tx/ty 写到图片 transform 上并刷新指示器
+    // 功能名称：jx530_apply —— 把 scale/tx/ty/rot 写到图片 transform 上并刷新指示器
     function jx530_apply(anim) {
       jx530_img.classList.toggle("jx530-anim", !!anim);   // 双击/回弹才带 0.25s 过渡
-      jx530_img.style.transform = "translate(" + jx530_tx + "px," + jx530_ty + "px) scale(" + jx530_scale + ")";
-      jx530_scaleBox.textContent = "x" + jx530_scale.toFixed(2);
+      jx530_img.style.transform = "translate(" + jx530_tx + "px," + jx530_ty + "px) rotate(" + jx530_rot + "deg) scale(" + jx530_scale + ")";
+      jx530_scaleBox.textContent = "x" + jx530_scale.toFixed(2) + (jx530_rot ? " · " + jx530_rot.toFixed(0) + "°" : "");
     }
 
-    // 功能名称：jx530_clamp —— 把位移约束回边界内（图片不许拖出容器）
-    // 简介：图片铺满容器且 scale>=1，横向可移动范围是 [W(1-s), 0]，纵向同理；s=1 时强制归零居中
-    function jx530_clamp() {
-      if (jx530_scale <= jx530_MIN) { jx530_scale = jx530_MIN; jx530_tx = 0; jx530_ty = 0; return; }
+    // 功能名称：jx530_bounds —— 旋转+缩放后图片外包矩形（AABB）允许的平移范围
+    // 简介：图片缩放后尺寸为 W*s×H*s，再旋转 r 度，其外接矩形宽高要用三角函数算：
+    //       W' = W·s·|cos r| + H·s·|sin r|，H' = W·s·|sin r| + H·s·|cos r|
+    //       平移 tx 的合法区间是 [W − W', 0]（保证图片始终盖住视口，不许拖出边界）
+    function jx530_bounds() {
       var r = jx530_view.getBoundingClientRect();
-      jx530_tx = Math.min(0, Math.max(r.width * (1 - jx530_scale), jx530_tx));
-      jx530_ty = Math.min(0, Math.max(r.height * (1 - jx530_scale), jx530_ty));
+      var rad = Math.abs(jx530_rot) * Math.PI / 180, c = Math.cos(rad), s = Math.sin(rad);
+      var w = r.width * jx530_scale, h = r.height * jx530_scale;
+      var bw = w * c + h * s, bh = w * s + h * c;         // 旋转后的外接矩形
+      return { minX: r.width - bw, minY: r.height - bh, maxX: 0, maxY: 0 };
     }
 
-    // 功能名称：jx530_toggleZoom —— 双击切换：1x ↔ 2x（带 0.25s 过渡）
+    // 功能名称：jx530_clamp —— 把位移硬约束回边界内（松手回弹时用）
+    function jx530_clamp() {
+      if (jx530_scale <= jx530_MIN) { jx530_scale = jx530_MIN; jx530_tx = 0; jx530_ty = 0; jx530_rot = 0; jx530_ox = 0; jx530_oy = 0; jx530_img.style.transformOrigin = "0 0"; return; }
+      var b = jx530_bounds();
+      jx530_tx = Math.min(b.maxX, Math.max(b.minX, jx530_tx));
+      jx530_ty = Math.min(b.maxY, Math.max(b.minY, jx530_ty));
+    }
+
+    // 功能名称：jx530_damp —— 边界阻尼：拖动过程中超出边界的部分按 DAMP 衰减（手感变沉）
+    function jx530_damp() {
+      var b = jx530_bounds();
+      jx530_tx = jx530_tx > b.maxX ? b.maxX + (jx530_tx - b.maxX) * jx530_DAMP
+               : jx530_tx < b.minX ? b.minX + (jx530_tx - b.minX) * jx530_DAMP : jx530_tx;
+      jx530_ty = jx530_ty > b.maxY ? b.maxY + (jx530_ty - b.maxY) * jx530_DAMP
+               : jx530_ty < b.minY ? b.minY + (jx530_ty - b.minY) * jx530_DAMP : jx530_ty;
+    }
+
+    // 功能名称：jx530_pinOrigin —— 把两指中点设为缩放/旋转的基准点（核心：缩放不跳）
+    // 简介：用 DOMMatrix 求当前变换的逆矩阵，把屏幕上的中点换算回图片坐标，
+    //       设为 transform-origin——之后 scale/rotate 都绕这个点变化，中点在屏幕上纹丝不动
+    function jx530_pinOrigin(cx, cy) {
+      var r = jx530_view.getBoundingClientRect();
+      var m = new DOMMatrix()
+        .translate(jx530_tx, jx530_ty)
+        .translate(jx530_ox, jx530_oy)
+        .rotate(jx530_rot).scale(jx530_scale)
+        .translate(-jx530_ox, -jx530_oy);
+      var p = m.inverse().transformPoint(new DOMPoint(cx - r.left, cy - r.top));
+      jx530_ox = p.x; jx530_oy = p.y;
+      jx530_img.style.transformOrigin = jx530_ox + "px " + jx530_oy + "px";
+    }
+
+    // 功能名称：jx530_toggleZoom —— 双击切换：1x ↔ 2x（带 0.25s 过渡，回 1x 自动复位）
     function jx530_toggleZoom() {
-      if (jx530_scale > jx530_MIN) { jx530_scale = 1; jx530_tx = 0; jx530_ty = 0; }   // 缩回 1x 自动居中
+      if (jx530_scale > jx530_MIN) { jx530_scale = 1; jx530_tx = 0; jx530_ty = 0; jx530_rot = 0; jx530_ox = 0; jx530_oy = 0; jx530_img.style.transformOrigin = "0 0"; }
       else { jx530_scale = 2; jx530_clamp(); }
       jx530_apply(true);
     }
@@ -120,42 +163,41 @@
       if (e.touches.length === 1) {                       // 单指：记住拖动起点
         jx530_lx = e.touches[0].clientX; jx530_ly = e.touches[0].clientY;
         jx530_dragging = jx530_scale > 1;                 // 1x 时不能拖
-      } else if (e.touches.length === 2) {                // 双指：记初始距离与当时倍数
+      } else if (e.touches.length === 2) {                // 双指：记初始距离/夹角/当时倍数与角度
         jx530_d0 = jx530_dist(e.touches[0], e.touches[1]);
+        jx530_ang0 = jx530_angle(e.touches[0], e.touches[1]);
         jx530_s0 = jx530_scale;
-        jx530_dragging = false;
+        jx530_rot0 = jx530_rot;
+        jx530_pinOrigin(                                  // 两指中点 → 缩放/旋转基准（不跳的关键）
+          (e.touches[0].clientX + e.touches[1].clientX) / 2,
+          (e.touches[0].clientY + e.touches[1].clientY) / 2);
         e.preventDefault();                               // 阻止浏览器整页缩放
       }
     }, { passive: false });                               // 要 preventDefault 就必须非被动
 
-    // ── touchmove：单指拖动 / 双指缩放（以两指中点为基准，保证缩放不跳） ──
+    // ── touchmove：单指拖动（带阻尼）/ 双指缩放+旋转（绕中点） ──
     jx530_view.addEventListener("touchmove", function (e) {
       e.preventDefault();
-      if (e.touches.length === 1 && jx530_dragging) {     // 单指拖动
+      if (e.touches.length === 1 && jx530_dragging) {     // 单指拖动：直接叠加位移 + 阻尼
         jx530_tx += e.touches[0].clientX - jx530_lx;
         jx530_ty += e.touches[0].clientY - jx530_ly;
         jx530_lx = e.touches[0].clientX; jx530_ly = e.touches[0].clientY;
-        jx530_clamp(); jx530_apply(false);
-      } else if (e.touches.length === 2) {                // 双指缩放
-        var d = jx530_dist(e.touches[0], e.touches[1]);
+        jx530_damp(); jx530_apply(false);
+      } else if (e.touches.length === 2) {                // 双指：距离比例 → 倍数；atan2 角度差 → 旋转
         if (jx530_d0 <= 0) return;
-        var prev = jx530_scale;
-        jx530_scale = Math.min(jx530_MAX, Math.max(jx530_MIN, jx530_s0 * d / jx530_d0));  // 1~4 倍
-        var r = jx530_view.getBoundingClientRect();
-        // 两指中点（相对容器）：缩放前后中点下的图像位置不变 → tx' = tx + cx*(s - s')
-        var cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
-        var cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
-        jx530_tx += cx * (prev - jx530_scale);
-        jx530_ty += cy * (prev - jx530_scale);
+        var d = jx530_dist(e.touches[0], e.touches[1]);
+        jx530_scale = Math.min(jx530_MAX, Math.max(jx530_MIN, jx530_s0 * d / jx530_d0));   // 1~4 倍
+        var da = jx530_angle(e.touches[0], e.touches[1]) - jx530_ang0;                     // 本次捏合转过的角度
+        jx530_rot = Math.max(-jx530_MAXROT, Math.min(jx530_MAXROT, jx530_rot0 + da));      // ±30°
         jx530_clamp(); jx530_apply(false);
       }
     }, { passive: false });
 
-    // ── touchend：全部抬起 → 约束回边界；短距轻点 → 双击判定 ──
+    // ── touchend：全部抬起 → 回弹约束；短距轻点 → 双击判定 ──
     jx530_view.addEventListener("touchend", function (e) {
       if (e.touches.length === 0) {
         jx530_dragging = false;
-        if (jx530_scale > jx530_MIN) { jx530_clamp(); jx530_apply(true); }   // 松手回弹到边界内
+        if (jx530_scale > jx530_MIN) { jx530_clamp(); jx530_apply(true); }   // 松手阻尼回弹到边界内
         var now = Date.now();
         if (now - jx530_lastTap < 300) { jx530_toggleZoom(); jx530_lastTap = 0; }  // 双 tap
         else jx530_lastTap = now;
@@ -164,6 +206,18 @@
 
     // 桌面双击也能切换 1x/2x（方便验收预览）
     jx530_view.addEventListener("dblclick", function (e) { e.preventDefault(); jx530_toggleZoom(); });
+
+    // ── 旋转屏幕不丢状态：orientationchange / resize（防抖 200ms）后按新尺寸重新约束 ──
+    var jx530_rotTimer = null;
+    function jx530_onRotate() {
+      clearTimeout(jx530_rotTimer);
+      jx530_rotTimer = setTimeout(function () {
+        jx530_clamp();        // 倍数/角度保留，位移按旋转后的容器尺寸重新约束
+        jx530_apply(true);
+      }, 200);                // orientationchange 后容器尺寸会晚到，防抖等它稳定
+    }
+    window.addEventListener("orientationchange", jx530_onRotate);
+    window.addEventListener("resize", jx530_onRotate);
   </script>
 </body>
 </html>

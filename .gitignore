@@ -1,7 +1,7 @@
 # 依赖目录（node 安装的包不入库，package.json / package-lock.json 保留）
 db/node_modules/
 
-# 大文件不入库：125MB 超过 GitHub 单文件 100MB 硬限制（压缩后可移除该行再推送）
+# 4K 原视频 125MB 超过 GitHub 单文件 100MB 硬限制，不入库（720p 压缩版 video-720.mp4 仅 2.4MB，正常入库）
 video.mp4
 
 # 系统与编辑器杂项

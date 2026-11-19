@@ -3,7 +3,8 @@
   功能名称：移动端触摸事件 · 4 关递进任务总览（任务一二三四导航页）
   功能简介：index 目录的合并入口——本页列出任务一至任务四四个小目录卡片，
             任务一（事件侦探·观察记录）点击展开参考答案，任务二/三/四分别
-            跳转到对应实现页面（手势卡片 / 图片查看器 / 摇一摇抽菜谱）
+            跳转到对应实现页面（手势卡片 / 图片查看器 / 摇一摇抽菜谱）；
+            页头上方嵌入任务操作演示视频 video.mp4（controls 手动点播）
   作者：金鑫　学号：24001010530
   建立时间：2026-11-16　使用模型：GLM-5.3-Flash
 -->
@@ -19,6 +20,12 @@
     .jx530-head h1{margin:0;font-size:24px;color:#fff}
     .jx530-head h1 b{color:#ffd166}
     .jx530-head p{margin:10px 0 0;font-size:13px;color:#b9b3ff;line-height:2}
+
+    /* ── 演示视频区块：controls 手动点播 + preload="metadata" 只预载元数据，避免 125MB 视频拖慢首屏 ── */
+    .jx530-video-wrap{width:min(92vw,460px);margin-bottom:26px;background:linear-gradient(160deg,#241f57,#3a2c7d);
+      border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:14px;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+    .jx530-video-wrap .jx530-video-title{font-size:14px;color:#ffd166;letter-spacing:1px;margin-bottom:10px}
+    .jx530-video-wrap video{display:block;width:100%;border-radius:10px;background:#000}
 
     /* ── 任务卡片：点击进入 / 展开 ── */
     .jx530-list{width:min(92vw,460px);display:flex;flex-direction:column;gap:14px}
@@ -48,6 +55,12 @@
   <div class="jx530-head">
     <h1>移动端触摸事件 · <b>4 关递进任务</b></h1>
     <p>观察记录 → 手势实现 → 综合交互 → 设备能力 + 排错　作者：金鑫 · 24001010530</p>
+  </div>
+
+  <!-- 演示视频：点播放才开始加载流，手机上流量友好；playsinline 防止 iOS 自动全屏 -->
+  <div class="jx530-video-wrap">
+    <div class="jx530-video-title">🎬 任务操作演示视频</div>
+    <video src="video.mp4" controls preload="metadata" playsinline></video>
   </div>
 
   <div class="jx530-list">
